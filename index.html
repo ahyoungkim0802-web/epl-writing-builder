@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EPL 라이팅빌더 · 생성기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#FCFAF5;--ink:#2B2622;--soft:#6B6258;--line:#D8CFBF;--line-2:#C9C0B0;
+  --who:#5E7C92;--did:#C26544;--what:#C79A3A;--be:#7E9460;}
+*{box-sizing:border-box;}
+body{margin:0;background:#E7E2D8;color:var(--ink);font-family:'IBM Plex Sans KR',sans-serif;font-weight:300;}
+.f{font-family:'Fraunces',serif;}
+.controls{position:sticky;top:0;z-index:20;background:#2B2622;color:#F3ECDF;padding:15px 22px;box-shadow:0 2px 10px rgba(0,0,0,.2);}
+.controls .title{font-family:'Fraunces',serif;font-weight:600;font-size:16px;margin-bottom:12px;}
+.controls .title span{font-family:'IBM Plex Sans KR';font-weight:300;font-size:12.5px;color:#C9BFAE;margin-left:8px;}
+.crow{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;}
+.fld{display:flex;flex-direction:column;gap:4px;}
+.fld label{font-size:11px;color:#C9BFAE;}
+.fld select,.fld input{font-family:'IBM Plex Sans KR';font-size:14px;padding:8px 11px;border:none;border-radius:8px;background:#F3ECDF;color:#2B2622;}
+.fld input[type=number]{width:78px;}
+.btn{font-family:'IBM Plex Sans KR';font-weight:500;font-size:14px;border:none;border-radius:8px;padding:10px 20px;cursor:pointer;}
+.btn.go{background:#C26544;color:#fff;}.btn.go:hover{background:#a9542f;}.btn.go:disabled{opacity:.55;}
+.btn.print{background:transparent;color:#F3ECDF;border:1px solid #6B6258;}
+.status{font-size:12.5px;color:#C9BFAE;}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px;margin-right:6px;}
+@keyframes sp{to{transform:rotate(360deg);}}
+
+#out{padding:20px 0 60px;}
+.sheet{background:#fff;width:210mm;max-width:96vw;margin:18px auto;padding:14mm 15mm;position:relative;box-shadow:0 3px 22px rgba(0,0,0,.12);height:296mm;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden;}
+.top{display:flex;justify-content:space-between;align-items:baseline;color:var(--soft);font-size:13px;margin-bottom:14px;}
+.top .bk u{display:inline-block;min-width:160px;border-bottom:1px solid var(--line-2);}
+.top .no{font-family:'Fraunces',serif;font-style:italic;}
+.struct{margin-bottom:14px;}
+.struct .nm{font-family:'Fraunces',serif;font-weight:600;font-size:21px;}
+.struct .sub{font-size:13px;color:var(--soft);margin-top:2px;}
+
+.cards{display:flex;gap:8px;margin-bottom:6px;}
+.card{flex:1;text-align:center;}
+.card .lab{border:1.5px solid var(--line-2);border-radius:10px;padding:9px 0;font-family:'Fraunces',serif;font-weight:600;font-size:17px;background:var(--paper);}
+.card.who .lab{color:var(--who);}.card.did .lab{color:var(--did);}.card.what .lab{color:var(--what);}
+.brain{display:flex;gap:8px;margin-bottom:18px;}
+.brain .c{flex:1;height:24px;border-bottom:1px dashed var(--line-2);}
+
+.block-h{font-family:'Fraunces',serif;font-weight:600;font-size:14px;color:var(--ink);margin:0 0 6px;border-bottom:1px solid var(--line);padding-bottom:5px;}
+.block-h span{font-family:'IBM Plex Sans KR';font-weight:300;font-size:11.5px;color:var(--soft);margin-left:6px;}
+.exlist{margin:0 0 18px;}
+.exlist .ex{display:flex;gap:10px;padding:5px 0;font-size:14.5px;align-items:baseline;}
+.exlist .ex .n{font-family:'Fraunces',serif;font-style:italic;color:var(--soft);font-size:12px;flex:0 0 14px;}
+.exlist .ex .en{font-family:'Fraunces',serif;flex:1;}
+.exlist .ex .ko{font-size:12px;color:var(--soft);flex:0 0 40%;text-align:right;}
+.line{height:31px;border-bottom:1px solid var(--line);}
+/* 구조 연습 (가이드 드릴) */
+.prac{flex:1;display:flex;flex-direction:column;justify-content:space-around;min-height:0;padding:4px 0;}
+.prac .item .q{font-size:14.5px;}
+.prac .item .q .n{font-family:'Fraunces',serif;font-style:italic;color:var(--did);font-size:12px;margin-right:8px;}
+.prac .item .q .hint{color:var(--soft);font-size:12px;margin-left:6px;}
+.prac .item .ln{height:30px;border-bottom:1px solid var(--line);margin-top:8px;}
+.prac .item .q .bl{display:inline-block;min-width:44px;border-bottom:1.4px solid var(--soft);margin:0 3px;vertical-align:baseline;}
+/* Words box */
+.wordbox{border:1px solid var(--line);border-radius:10px;padding:11px 16px;background:var(--paper);margin-top:10px;}
+.wordbox .wh{font-family:'Fraunces',serif;font-weight:600;font-size:13px;color:var(--ink);margin-bottom:7px;}
+.wordbox .wh span{font-family:'IBM Plex Sans KR';font-weight:300;font-size:11px;color:var(--soft);margin-left:6px;}
+.wordbox .chips{display:flex;flex-wrap:wrap;gap:6px 14px;}
+.wordbox .chip{font-family:'Fraunces',serif;font-size:14px;color:var(--ink);}
+.practice .line{margin-top:9px;}
+/* 남은 공간을 균등하게 채우는 줄 */
+.fillzone{flex:1;display:flex;flex-direction:column;min-height:0;}
+.fillzone .fl{flex:1;min-height:36px;border-bottom:1px solid var(--line);}
+
+.think{margin-bottom:6px;}
+.think .row{display:flex;align-items:flex-end;gap:12px;margin-bottom:17px;}
+.think .row .q{flex:0 0 150px;font-family:'Fraunces',serif;font-weight:600;font-size:14px;color:var(--did);line-height:1.3;}
+.think .row .q small{display:block;font-family:'IBM Plex Sans KR';font-weight:300;font-size:11px;color:var(--soft);}
+.think .row .l{flex:1;height:22px;border-bottom:1px solid var(--line);}
+/* 상위 단계: 생각 정리를 페이지 가득 펼침 */
+.think.spread{flex:1;display:flex;flex-direction:column;justify-content:space-around;}
+.think.spread .row{margin-bottom:0;}
+/* 크리티컬 라이팅 페이지 */
+.crit{flex:1;display:flex;flex-direction:column;}
+.csec{flex:1;display:flex;flex-direction:column;padding:3px 0;}
+.csec .clab{font-family:'Fraunces',serif;font-weight:600;font-size:13.5px;color:var(--did);margin-bottom:3px;}
+.csec .clab small{font-family:'IBM Plex Sans KR';font-weight:300;font-size:11px;color:var(--soft);margin-left:6px;}
+.csec .fillzone{flex:1;}
+/* 한 장형 크리티컬: 라벨 + 촘촘한 노트 줄 */
+.csec2{margin-bottom:6px;}
+.csec2 .clab{font-family:'Fraunces',serif;font-weight:600;font-size:13px;color:var(--did);margin-bottom:2px;}
+.csec2 .clab small{font-family:'IBM Plex Sans KR';font-weight:300;font-size:11px;color:var(--soft);margin-left:6px;}
+.nl{height:25px;border-bottom:1px solid var(--line);}
+/* 배운 구조 활용 안내 */
+.usebox{border:1px dashed var(--line-2);border-radius:8px;padding:8px 13px;margin:4px 0 10px;background:var(--paper);}
+.usebox .ut{font-size:12.5px;color:var(--ink);font-weight:500;}
+.usebox .uchips{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:5px;}
+.usebox .uchip{font-size:12.5px;color:var(--ink);}
+.usebox .uchip i{font-family:'Fraunces',serif;font-style:italic;color:var(--soft);font-size:12px;margin-left:3px;}
+/* 워크북: 표지·커리큘럼·원서 박스 */
+.cover{justify-content:center;align-items:center;text-align:center;}
+.cv-brand{font-size:12px;color:var(--soft);letter-spacing:2px;margin-bottom:46px;}
+.cv-title{font-family:'Fraunces',serif;font-weight:600;font-size:46px;line-height:1.1;}
+.cv-sub{font-size:15px;color:var(--soft);margin-top:12px;}
+.cv-stage{font-family:'Fraunces',serif;font-size:22px;color:var(--did);margin-top:64px;}
+.cv-struct{font-size:13.5px;color:var(--soft);margin-top:8px;}
+.cv-meta{font-size:13px;color:var(--soft);margin-top:90px;}
+.cu-intro{font-size:13px;color:var(--soft);margin-bottom:16px;line-height:1.6;}
+.cu{display:flex;flex-direction:column;flex:1;justify-content:space-between;}
+.cu-row{display:flex;align-items:baseline;gap:11px;border-bottom:1px solid var(--line);padding:6px 0 12px;}
+.cu-n{font-family:'Fraunces',serif;font-style:italic;color:var(--did);flex:0 0 66px;font-size:13px;}
+.cu-f{font-size:14px;}.cu-f i{font-family:'Fraunces',serif;font-style:italic;color:var(--soft);font-size:12px;margin-left:4px;}
+.cu-rev{font-size:11px;color:var(--soft);margin-left:auto;text-align:right;}
+.cu-cyc{font-family:'Fraunces',serif;font-style:italic;color:var(--did);font-size:13px;margin:4px 0 8px;}
+.cu-foot{margin-top:14px;padding-top:10px;border-top:1px dashed var(--line-2);font-size:13px;color:var(--soft);text-align:center;}
+.readbox{border:1px solid var(--did);border-radius:10px;padding:11px 15px;margin-bottom:14px;background:#FBF4EF;}
+.readbox .bwh{font-family:'Fraunces',serif;font-weight:600;font-size:14px;color:var(--did);margin-bottom:9px;}
+.readbox .bwh span{font-family:'IBM Plex Sans KR';font-weight:300;font-size:11px;color:var(--soft);margin-left:6px;}
+.bwgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 26px;}
+.bw{height:24px;border-bottom:1px solid var(--line-2);display:flex;align-items:flex-end;}
+.loopbox{border:1px solid var(--did);border-radius:10px;padding:12px 14px;margin:6px 0 16px;text-align:center;background:#FBF4EF;font-family:'Fraunces',serif;font-size:14px;color:var(--did);}
+.loopbox b{color:var(--ink);}
+.loopbox small{display:block;font-family:'IBM Plex Sans KR';font-weight:300;font-size:11px;color:var(--soft);margin-top:4px;}
+.bwn{font-family:'Fraunces',serif;font-style:italic;color:var(--soft);font-size:10px;margin-bottom:1px;}
+/* 직접 문장 만들기 */
+.makelist{flex:1;display:flex;flex-direction:column;justify-content:space-around;margin-top:6px;}
+.mk{display:flex;align-items:flex-end;gap:10px;}
+.mk .mn{font-family:'Fraunces',serif;font-style:italic;color:var(--soft);font-size:13px;flex:0 0 16px;}
+.mk .ml{flex:1;border-bottom:1px solid var(--line);height:22px;}
+.sf-meta{display:flex;align-items:baseline;gap:6px;font-size:13px;color:var(--ink);margin:8px 0 4px;flex-wrap:wrap;}
+.sf-meta span{color:var(--soft);font-size:12px;}
+.sf-meta u{display:inline-block;border-bottom:1px solid var(--line-2);min-width:130px;margin-right:16px;}
+.sl{display:flex;align-items:flex-end;gap:8px;margin-top:11px;}
+.sl .st{font-family:'Fraunces',serif;font-style:italic;color:var(--soft);font-size:14px;white-space:nowrap;}
+.sl .sline{flex:1;border-bottom:1px solid var(--line);height:24px;}
+
+.fb{margin-top:24px;border-top:1px solid var(--line);padding-top:12px;display:flex;justify-content:space-between;align-items:center;color:var(--soft);font-size:12.5px;}
+.fb .checks{display:flex;gap:14px;flex-wrap:wrap;}
+.fb .checks span{display:inline-flex;align-items:center;gap:5px;}
+.fb .checks span::before{content:"";width:13px;height:13px;border:1.4px solid var(--line-2);border-radius:3px;}
+.fb .stamp{width:46px;height:46px;border:1px dashed var(--line-2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;text-align:center;flex:0 0 46px;}
+.logo{margin-top:14px;text-align:right;color:var(--soft);font-size:12px;line-height:1.25;}
+.logo b{display:block;font-family:'Fraunces',serif;font-size:14px;color:var(--ink);}
+
+@media print{@page{size:A4;margin:0;}html,body{background:#fff;margin:0;padding:0;}.controls{display:none;}#out{padding:0;margin:0;}.sheet{width:210mm;height:296mm;max-width:none;margin:0;box-shadow:none;overflow:hidden;page-break-after:always;break-after:page;}.sheet:last-child{page-break-after:auto;break-after:auto;}}
+@media(max-width:680px){.sheet{padding:28px 20px;}.exlist .ex{flex-wrap:wrap;}.exlist .ex .ko{text-align:left;flex:1;}}
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <div class="title">EPL 라이팅빌더 · 생성기 <span>구조 단계를 고르면 그 단계의 북라이팅 노트를 자동 생성</span></div>
+  <div class="crow">
+    <div class="fld"><label>구조 단계 (1~5)</label><select id="stage" style="min-width:280px;"></select></div>
+    <div class="fld"><label>장수 (회차)</label><input type="number" id="count" value="16" min="1" max="60"></div>
+    <button class="btn go" id="goBtn" onclick="generate()">만들기</button>
+    <button class="btn print" onclick="window.print()">🖨 인쇄 / PDF</button>
+    <span class="status" id="status"></span>
+  </div>
+</div>
+<div id="out"></div>
+
+<script>
+/* 5단계 (2개씩 통합) — 문법은 예문으로 구체화 */
+const STAGES=[
+ {id:'s1',stage:'1단계',nm:'기본 문장',sub:'주어+동사 · 무엇을 · be+상태',gens:['g1','g2','be'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
+ {id:'s2',stage:'2단계',nm:'수식어·과거',sub:'형용사 · 부사 · 과거형',gens:['g3','adv','g5'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
+ {id:'s3',stage:'3단계',nm:'부정·의문',sub:'부정문 · 의문문 · 의문사',gens:['neg','ques','indir'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
+ {id:'s4',stage:'4단계',nm:'미래·조동사',sub:'미래(will) · can · must',gens:['fut','can','must'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
+ {id:'s5',stage:'5단계',nm:'비교·수량',sub:'수량 · 비교급 · 최상급',gens:['quant','g8','sup'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
+ {id:'s6',stage:'6단계',nm:'to·동명사·연결',sub:'to부정사 · 동명사 · 접속사',gens:['g7','ger','g6'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
+ {id:'s7',stage:'7단계',nm:'문장형식·완료',sub:'5형식 · that절 · 현재완료',gens:['g10','that','perf'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
+ {id:'s8',stage:'8단계',nm:'수동·관계사',sub:'수동태 · 관계대명사 · 관계부사',gens:['pass','g9','reladv'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
+ {id:'s9',stage:'9단계',nm:'통합 라이팅',sub:'배운 구조 종합',gens:['g2','g7','g8'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
+ {id:'s10',stage:'10단계',nm:'비판적 글쓰기',sub:'주장·근거·반론·결론',gens:['g10','subj','g9'],slots:[['주인공','who'],['동작','did'],['대상','what']]}
+];
+/* ===== 조합형 생성 엔진 v2 — 한 장 안에서 주어·단어가 겹치지 않게 순환 배치 ===== */
+const HT=t=>`<span class="hint">(${t})</span>`;
+function sh(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+const subjS=[['The dog','개가'],['The cat','고양이가'],['A bird','새가'],['The rabbit','토끼가'],['The boy','소년이'],['The girl','소녀가'],['A frog','개구리가'],['The horse','말이'],['A duck','오리가'],['A monkey','원숭이가'],['The baby','아기가'],['A lion','사자가'],['The fox','여우가'],['A bear','곰이'],['The puppy','강아지가'],['A turtle','거북이가'],['An owl','부엉이가'],['A panda','판다가'],['A pig','돼지가'],['The deer','사슴이'],['A bee','벌이'],['The kitten','새끼고양이가']];
+const vbS=[['runs','달려요'],['jumps','뛰어요'],['sleeps','자요'],['eats','먹어요'],['plays','놀아요'],['sings','노래해요'],['smiles','웃어요'],['sits','앉아요'],['walks','걸어요'],['swims','헤엄쳐요'],['cries','울어요'],['dances','춤춰요'],['hides','숨어요'],['rests','쉬어요'],['reads','읽어요'],['claps','박수쳐요'],['yawns','하품해요'],['waves','손 흔들어요']];
+const subjP=[['I','나는'],['We','우리는'],['They','그들은'],['The children','아이들은'],['My friends','친구들은'],['You','너는'],['The kids','꼬마들은'],['Tom and I','Tom과 나는'],['The students','학생들은'],['The twins','쌍둥이는']];
+const vo=[['like','dogs','개를','좋아해요'],['read','a book','책을','읽어요'],['eat','an apple','사과를','먹어요'],['want','a toy','장난감을','원해요'],['have','a pet','반려동물을','키워요'],['see','a star','별을','봐요'],['make','a cake','케이크를','만들어요'],['play','soccer','축구를','해요'],['draw','a picture','그림을','그려요'],['watch','a movie','영화를','봐요'],['catch','a ball','공을','잡아요'],['open','the door','문을','열어요'],['find','a key','열쇠를','찾아요'],['ride','a bike','자전거를','타요'],['paint','a wall','벽을','칠해요'],['build','a tower','탑을','쌓아요']];
+const adj=[['big','큰'],['small','작은'],['red','빨간'],['fast','빠른'],['pretty','예쁜'],['old','낡은'],['new','새'],['tall','키 큰'],['cute','귀여운'],['long','긴'],['brave','용감한'],['kind','친절한'],['funny','웃긴'],['quiet','조용한'],['warm','따뜻한'],['shiny','반짝이는']];
+const nounObj=[['dog','개를'],['cat','고양이를'],['ball','공을'],['hat','모자를'],['car','차를'],['book','책을'],['bird','새를'],['box','상자를'],['house','집을'],['tree','나무를'],['robot','로봇을'],['kite','연을'],['bag','가방을'],['flower','꽃을']];
+const place=[['in the park','공원에서','어디서'],['at home','집에서','어디서'],['at school','학교에서','어디서'],['in the garden','정원에서','어디서'],['in the sea','바다에서','어디서'],['in the morning','아침에','언제'],['at night','밤에','언제'],['after school','방과 후에','언제'],['on Sunday','일요일에','언제'],['in the room','방에서','어디서'],['by the river','강가에서','어디서'],['before dinner','저녁 전에','언제'],['on the hill','언덕에서','어디서'],['every day','매일','언제']];
+const VB5=[['play','played','will play','am playing','놀다'],['read','read','will read','am reading','읽다'],['watch','watched','will watch','am watching','보다'],['walk','walked','will walk','am walking','걷다'],['help','helped','will help','am helping','돕다'],['cook','cooked','will cook','am cooking','요리하다'],['paint','painted','will paint','am painting','그리다'],['clean','cleaned','will clean','am cleaning','청소하다'],['jump','jumped','will jump','am jumping','뛰다'],['call','called','will call','am calling','전화하다']];
+const TIME=[['yesterday','어제',1],['tomorrow','내일',2],['now','지금',3],['last night','어젯밤',1],['next week','다음 주',2],['this morning','오늘 아침',1],['these days','요즘',3],['soon','곧',2]];
+const TTAG={1:'과거',2:'미래',3:'진행'};
+const CL1=[['I was tired','나는 피곤했고'],['It rained','비가 왔고'],['She was happy','그녀는 행복했고'],['We won the game','우리는 이겼고'],['He studied hard','그는 열심히 했고'],['I was hungry','나는 배고팠고'],['The bus was late','버스가 늦었고'],['The sun came out','해가 났고']];
+const CL2=[['I slept','잤어요'],['we stayed home','집에 있었어요'],['she smiled','웃었어요'],['we celebrated','축하했어요'],['he passed','합격했어요'],['I ate lunch','점심을 먹었어요'],['we ran outside','밖으로 뛰었어요'],['I felt good','기분이 좋았어요']];
+const CONJ=['and','but','so','because'];
+const V1=[['want','원하다'],['like','좋아하다'],['need','필요로 하다'],['hope','바라다'],['try','노력하다'],['decide','결정하다'],['plan','계획하다'],['start','시작하다'],['love','정말 좋아하다'],['wish','소망하다']];
+const V2=[['read','읽다'],['play','놀다'],['win','이기다'],['help','돕다'],['learn','배우다'],['swim','수영하다'],['dance','춤추다'],['draw','그리다'],['sing','노래하다'],['cook','요리하다']];
+const NOUNX=[['The dog','개','the cat','고양이'],['An elephant','코끼리','a mouse','쥐'],['A car','차','a bike','자전거'],['The sun','해','the moon','달'],['Summer','여름','winter','겨울'],['Gold','금','silver','은'],['A plane','비행기','a train','기차'],['Today','오늘','yesterday','어제'],['A lion','사자','a cat','고양이'],['The sea','바다','the lake','호수'],['A giraffe','기린','a dog','개'],['Iron','철','wood','나무']];
+const ADJC=[['big','bigger','큰'],['fast','faster','빠른'],['hot','hotter','뜨거운'],['cold','colder','차가운'],['tall','taller','키 큰'],['small','smaller','작은'],['heavy','heavier','무거운'],['old','older','오래된'],['strong','stronger','힘센'],['light','lighter','가벼운']];
+const PERSON=[['a boy','소년'],['a girl','소녀'],['the man','남자'],['the teacher','선생님'],['my friend','친구'],['a king','왕'],['a doctor','의사'],['the singer','가수']];
+const CLW=[['runs fast','빨리 달리는'],['sings well','노래 잘하는'],['helps people','사람을 돕는'],['reads a lot','책 많이 읽는'],['plays soccer','축구하는'],['lives next door','옆집에 사는'],['paints well','그림 잘 그리는'],['speaks English','영어를 하는']];
+const THING=[['a book','책'],['the dog','개'],['a toy','장난감'],['the house','집'],['a song','노래'],['the cake','케이크'],['a movie','영화'],['the bike','자전거']];
+const CLH=[['I like','내가 좋아하는'],['I read','내가 읽은'],['I want','내가 원하는'],['she made','그녀가 만든'],['we saw','우리가 본'],['he found','그가 찾은']];
+const SUBJ10=[['The book','그 책은'],['The sun','해는'],['The news','그 소식은'],['Music','음악은'],['The game','그 게임은'],['This story','이 이야기는'],['The movie','그 영화는'],['Her smile','그녀의 미소는'],['The song','그 노래는'],['The trip','그 여행은']];
+const VC=[['makes','me','happy','나를','행복하게'],['makes','him','sad','그를','슬프게'],['keeps','the room','clean','방을','깨끗하게'],['calls','the dog','Max','개를','Max라고'],['finds','the book','easy','책을','쉽다고'],['names','the cat','Coco','고양이를','Coco라고'],['makes','us','laugh','우리를','웃게'],['keeps','us','warm','우리를','따뜻하게'],['paints','the wall','blue','벽을','파랗게'],['makes','her','smile','그녀를','웃게']];
+
+const GEN={
+ g1:(n)=>{const S=sh(subjS),V=sh(vbS),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],v=V[i%V.length];o.push({en:`${s[0]} ${v[0]}.`,ko:`${s[1]} ${v[1]}`,dr:`${s[0]} ____.`,hint:'동작'});}return o;},
+ g2:(n)=>{const S=sh(subjP),O=sh(vo),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],x=O[i%O.length];o.push({en:`${s[0]} ${x[0]} ${x[1]}.`,ko:`${s[1]} ${x[2]} ${x[3]}`,dr:`${s[0]} ${x[0]} ____.`,hint:'대상'});}return o;},
+ g3:(n)=>{const S=sh(subjP),A=sh(adj),N=sh(nounObj),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],a=A[i%A.length],nn=N[i%N.length];o.push({en:`${s[0]} have a ${a[0]} ${nn[0]}.`,ko:`${s[1]} ${a[1]} ${nn[1]} 가지고 있어요`,dr:`${s[0]} have a ____ ${nn[0]}.`,hint:'꾸밈말'});}return o;},
+ g4:(n)=>{const S=sh(subjS),V=sh(vbS),PL=sh(place),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],v=V[i%V.length],pl=PL[i%PL.length];o.push({en:`${s[0]} ${v[0]} ${pl[0]}.`,ko:`${s[1]} ${pl[1]} ${v[1]}`,dr:`${s[0]} ${v[0]} ____.`,hint:pl[2]});}return o;},
+ g5:(n)=>{const VV=sh(VB5),T=sh(TIME),o=[];for(let i=0;i<n;i++){const v=VV[i%VV.length],t=T[i%T.length],ev=t[2]===1?v[1]:t[2]===2?v[2]:v[3];o.push({en:`I ${ev} ${t[0]}.`,ko:`나는 ${t[1]} ${v[4].replace(/다$/,'')}`,dr:`I ____ ${t[0]}.`,hint:TTAG[t[2]]});}return o;},
+ g6:(n)=>{const A=sh(CL1),B=sh(CL2),C=sh(CONJ),o=[];for(let i=0;i<n;i++){const c1=A[i%A.length],c2=B[i%B.length],cj=C[i%C.length];o.push({en:`${c1[0]} ${cj} ${c2[0]}.`,ko:`${c1[1]} ${c2[1]}`,dr:`${c1[0]} ____ ${c2[0]}.`,hint:'and/but/so/because'});}return o;},
+ g7:(n)=>{const S=sh(subjP),A=sh(V1),B=sh(V2),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],a=A[i%A.length],b=B[i%B.length];o.push({en:`${s[0]} ${a[0]} to ${b[0]}.`,ko:`${s[1]} ${b[1].replace(/다$/,'')}고 ${a[1].replace(/다$/,'')}요`,dr:`${s[0]} ${a[0]} ____ ${b[0]}.`,hint:'to'});}return o;},
+ g8:(n)=>{const N=sh(NOUNX),A=sh(ADJC),o=[];for(let i=0;i<n;i++){const nn=N[i%N.length],a=A[i%A.length];o.push({en:`${nn[0]} is ${a[1]} than ${nn[2]}.`,ko:`${nn[1]}는 ${nn[3]}보다 ${a[2]}`,dr:`${nn[0]} is ____ than ${nn[2]}.`,hint:'비교급'});}return o;},
+ g9:(n)=>{const PE=sh(PERSON),CW=sh(CLW),TH=sh(THING),CH=sh(CLH),o=[];for(let i=0;i<n;i++){if(i%2===0){const p=PE[(i>>1)%PE.length],c=CW[(i>>1)%CW.length];o.push({en:`I know ${p[0]} who ${c[0]}.`,ko:`나는 ${c[1]} ${p[1]}을 알아요`,dr:`I know ${p[0]} ____ ${c[0]}.`,hint:'who'});}else{const t=TH[(i>>1)%TH.length],c=CH[(i>>1)%CH.length];o.push({en:`This is ${t[0]} that ${c[0]}.`,ko:`이것은 ${c[1]} ${t[1]}이에요`,dr:`This is ${t[0]} ____ ${c[0]}.`,hint:'which/that'});}}return o;},
+ g10:(n)=>{const S=sh(SUBJ10),V=sh(VC),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],vc=V[i%V.length];o.push({en:`${s[0]} ${vc[0]} ${vc[1]} ${vc[2]}.`,ko:`${s[1]} ${vc[3]} ${vc[4]} 해요`,dr:`${s[0]} ${vc[0]} ${vc[1]} ____.`,hint:'보어'});}return o;}
+};
+
+/* ===== 추가 구조 생성기 (10단계 × 3구조용) ===== */
+const ADV=[['quickly','빠르게'],['slowly','천천히'],['quietly','조용히'],['happily','행복하게'],['carefully','조심히'],['loudly','크게'],['well','잘'],['hard','열심히'],['softly','부드럽게'],['suddenly','갑자기'],['gently','부드럽게'],['bravely','용감하게']];
+const QNT=[['many','많은'],['a lot of','많은'],['some','약간의'],['a few','몇'],['three','세'],['several','여러'],['no','없는'],['two','두']];
+const PLN=[['books','책'],['apples','사과'],['friends','친구'],['toys','장난감'],['dogs','개'],['flowers','꽃'],['coins','동전'],['birds','새'],['cars','차'],['ideas','생각']];
+const PP=[['eaten','먹다'],['seen','보다'],['done','하다'],['read','읽다'],['finished','끝내다'],['gone','가다'],['made','만들다'],['written','쓰다'],['found','찾다'],['heard','듣다']];
+const GER=[['Swimming','수영','swim'],['Reading','독서','read'],['Running','달리기','run'],['Singing','노래','sing'],['Cooking','요리','cook'],['Playing','놀기','play'],['Drawing','그리기','draw'],['Dancing','춤추기','dance'],['Hiking','등산','hike'],['Writing','글쓰기','write']];
+const SUP=[['biggest','가장 큰','big'],['fastest','가장 빠른','fast'],['tallest','가장 키 큰','tall'],['smallest','가장 작은','small'],['oldest','가장 오래된','old'],['happiest','가장 행복한','happy'],['best','최고의','good'],['highest','가장 높은','high'],['funniest','가장 웃긴','funny'],['kindest','가장 친절한','kind']];
+const PART=[['running','달리는','run'],['sleeping','자는','sleep'],['crying','우는','cry'],['broken','부서진','break'],['painted','칠해진','paint'],['singing','노래하는','sing'],['flying','나는','fly'],['closed','닫힌','close'],['smiling','웃는','smile'],['falling','떨어지는','fall']];
+const PCL=[['Walking home','집에 걸어가며'],['Reading a book','책을 읽으며'],['Feeling tired','피곤해서'],['Hearing the news','소식을 듣고'],['Opening the door','문을 열며'],['Smiling brightly','밝게 웃으며'],['Running fast','빨리 달리며'],['Looking up','올려다보며']];
+const PCM=[['I saw a cat','고양이를 봤어요'],['she sat down','그녀는 앉았어요'],['we went out','우리는 나갔어요'],['he smiled','그는 웃었어요'],['I felt happy','행복했어요'],['they cheered','그들은 환호했어요']];
+const PASS=[['is made','만들어져요'],['was built','지어졌어요'],['is loved','사랑받아요'],['was found','발견됐어요'],['is used','사용돼요'],['was written','쓰여졌어요'],['is kept','보관돼요'],['was opened','열렸어요']];
+const PASSUBJ=[['The cake','케이크는'],['The house','집은'],['The song','노래는'],['The book','책은'],['The bridge','다리는'],['The door','문은'],['The picture','그림은'],['The toy','장난감은']];
+const RADV=[['the place','장소','where'],['the day','날','when'],['the reason','이유','why'],['the way','방법','how']];
+const RADVCL=[['we met','우리가 만난'],['I was born','내가 태어난'],['she left','그녀가 떠난'],['he cried','그가 운'],['we played','우리가 논']];
+const INDQ=[['where she lives','그녀가 어디 사는지'],['what he wants','그가 무엇을 원하는지'],['why they left','그들이 왜 떠났는지'],['how it works','어떻게 되는지'],['who made it','누가 만들었는지'],['when it starts','언제 시작하는지']];
+const SUBJIF=[['had time','시간이 있다면','I would travel','여행할 텐데'],['were rich','부자라면','I would help','도울 텐데'],['knew the answer','답을 안다면','I would tell you','말해줄 텐데'],['could fly','날 수 있다면','I would go home','집에 갈 텐데'],['were you','너라면','I would try again','다시 해볼 텐데']];
+
+Object.assign(GEN,{
+ adv:(n)=>{const S=sh(subjS),V=sh(vbS),A=sh(ADV),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],v=V[i%V.length],a=A[i%A.length];o.push({en:`${s[0]} ${v[0]} ${a[0]}.`,ko:`${s[1]} ${a[1]} ${v[1]}`,dr:`${s[0]} ${v[0]} ____.`,hint:'부사'});}return o;},
+ quant:(n)=>{const S=sh(subjP),Q=sh(QNT),N=sh(PLN),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],q=Q[i%Q.length],nn=N[i%N.length];o.push({en:`${s[0]} have ${q[0]} ${nn[0]}.`,ko:`${s[1]} ${q[1]} ${nn[1]}이 있어요`,dr:`${s[0]} have ____ ${nn[0]}.`,hint:'수량'});}return o;},
+ fut:(n)=>{const S=sh(subjP),V=sh(V2),T=sh(TIME.filter(t=>t[2]===2)),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],v=V[i%V.length],t=T[i%T.length];o.push({en:`${s[0]} will ${v[0]} ${t[0]}.`,ko:`${s[1]} ${t[1]} ${v[1].replace(/다$/,'')} 거예요`,dr:`${s[0]} ____ ${v[0]} ${t[0]}.`,hint:'will'});}return o;},
+ perf:(n)=>{const S=sh(subjP),P=sh(PP),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],p=P[i%P.length];o.push({en:`${s[0]} have ${p[0]} it.`,ko:`${s[1]} 그것을 ${p[1]}`,dr:`${s[0]} have ____ it.`,hint:'p.p'});}return o;},
+ ques:(n)=>{const S=sh(subjP),O=sh(vo),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],x=O[i%O.length];o.push({en:`Do ${s[0].toLowerCase()} ${x[0]} ${x[1]}?`,ko:`${s[1]} ${x[2]} ${x[3].replace(/요$/,'')}나요?`,dr:`____ ${s[0].toLowerCase()} ${x[0]} ${x[1]}?`,hint:'Do/Does/Did'});}return o;},
+ neg:(n)=>{const S=sh(subjP),O=sh(vo),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],x=O[i%O.length];o.push({en:`${s[0]} don't ${x[0]} ${x[1]}.`,ko:`${s[1]} ${x[2]} 안 ${x[3]}`,dr:`${s[0]} ____ ${x[0]} ${x[1]}.`,hint:"don't/doesn't"});}return o;},
+ can:(n)=>{const S=sh(subjP),V=sh(V2),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],v=V[i%V.length];o.push({en:`${s[0]} can ${v[0]}.`,ko:`${s[1]} ${v[1].replace(/다$/,'')} 수 있어요`,dr:`${s[0]} ____ ${v[0]}.`,hint:'can'});}return o;},
+ must:(n)=>{const S=sh(subjP),V=sh(V2),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],v=V[i%V.length];o.push({en:`${s[0]} must ${v[0]}.`,ko:`${s[1]} ${v[1].replace(/다$/,'')}야 해요`,dr:`${s[0]} ____ ${v[0]}.`,hint:'must/should'});}return o;},
+ modwill:(n)=>{const S=sh(subjP),V=sh(V2),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],v=V[i%V.length];o.push({en:`${s[0]} will ${v[0]} soon.`,ko:`${s[1]} 곧 ${v[1].replace(/다$/,'')} 거예요`,dr:`${s[0]} ____ ${v[0]} soon.`,hint:'will/may'});}return o;},
+ ger:(n)=>{const G=sh(GER),o=[];for(let i=0;i<n;i++){const g=G[i%G.length];o.push({en:`${g[0]} is fun.`,ko:`${g[1]}는 재미있어요`,dr:`____ is fun. (${g[2]}→~ing)`,hint:'~ing'});}return o;},
+ that:(n)=>{const S=sh(subjP),O=sh(vo),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],x=O[i%O.length];o.push({en:`I think that ${s[0].toLowerCase()} ${x[0]} ${x[1]}.`,ko:`나는 ${s[1]} ${x[2]} ${x[3]}고 생각해요`,dr:`I think ____ ${s[0].toLowerCase()} ${x[0]} ${x[1]}.`,hint:'that'});}return o;},
+ asas:(n)=>{const N=sh(NOUNX),A=sh(ADJC),o=[];for(let i=0;i<n;i++){const nn=N[i%N.length],a=A[i%A.length];o.push({en:`${nn[0]} is as ${a[0]} as ${nn[2]}.`,ko:`${nn[1]}는 ${nn[3]}만큼 ${a[2]}`,dr:`${nn[0]} is as ____ as ${nn[2]}.`,hint:'원급'});}return o;},
+ sup:(n)=>{const SU=sh(SUP),N=sh(nounObj),o=[];for(let i=0;i<n;i++){const su=SU[i%SU.length],nn=N[i%N.length];o.push({en:`This is the ${su[0]} ${nn[0]}.`,ko:`이것은 ${su[1]} ${nn[1].replace(/[을를]$/,'')}이에요`,dr:`This is the ____ ${nn[0]}. (${su[2]}→최상급)`,hint:'최상급'});}return o;},
+ part:(n)=>{const P=sh(PART),N=sh(nounObj),o=[];for(let i=0;i<n;i++){const p=P[i%P.length],nn=N[i%N.length];o.push({en:`Look at the ${p[0]} ${nn[0]}.`,ko:`${p[1]} ${nn[1]} 봐요`,dr:`Look at the ____ ${nn[0]}. (${p[2]}→분사)`,hint:'분사'});}return o;},
+ partcl:(n)=>{const P=sh(PCL),M=sh(PCM),o=[];for(let i=0;i<n;i++){const p=P[i%P.length],m=M[i%M.length];o.push({en:`${p[0]}, ${m[0]}.`,ko:`${p[1]} ${m[1]}`,dr:`____, ${m[0]}. (분사구문 ~ing)`,hint:'~ing'});}return o;},
+ pass:(n)=>{const S=sh(PASSUBJ),P=sh(PASS),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],p=P[i%P.length];o.push({en:`${s[0]} ${p[0]}.`,ko:`${s[1]} ${p[1]}`,dr:`${s[0]} ____. (수동태 be p.p)`,hint:'be p.p'});}return o;},
+ reladv:(n)=>{const R=sh(RADV),C=sh(RADVCL),o=[];for(let i=0;i<n;i++){const r=R[i%R.length],c=C[i%C.length];o.push({en:`This is ${r[0]} ${r[2]} ${c[0]}.`,ko:`여기가 ${c[1]} ${r[1]}이에요`,dr:`This is ${r[0]} ____ ${c[0]}. (관계부사)`,hint:r[2]});}return o;},
+ indir:(n)=>{const Q=sh(INDQ),o=[];for(let i=0;i<n;i++){const q=Q[i%Q.length];o.push({en:`I know ${q[0]}.`,ko:`나는 ${q[1]} 알아요`,dr:`I know ____. (간접의문문)`,hint:'간접의문문'});}return o;},
+ subj:(n)=>{const F=sh(SUBJIF),o=[];for(let i=0;i<n;i++){const f=F[i%F.length];o.push({en:`If I ${f[0]}, ${f[2]}.`,ko:`내가 ${f[1]} ${f[3]}`,dr:`If I ${f[0]}, ____. (가정법)`,hint:'would'});}return o;}
+});
+
+const BEADJ=[['happy','행복한'],['kind','친절한'],['tall','키 큰'],['smart','똑똑한'],['busy','바쁜'],['tired','피곤한'],['hungry','배고픈'],['brave','용감한'],['shy','수줍은'],['young','어린'],['strong','힘센'],['cute','귀여운']];
+const BESUBJ=[['I','am','나는'],['She','is','그녀는'],['He','is','그는'],['We','are','우리는'],['They','are','그들은'],['You','are','너는'],['The dog','is','그 개는'],['My friends','are','친구들은'],['The baby','is','아기는'],['The boys','are','소년들은']];
+Object.assign(GEN,{
+ be:(n)=>{const S=sh(BESUBJ),A=sh(BEADJ),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],a=A[i%A.length];o.push({en:`${s[0]} ${s[1]} ${a[0]}.`,ko:`${s[2]} ${a[1]}`,dr:`${s[0]} ${s[1]} ____.`,hint:'상태'});}return o;}
+});
+function genItems(stage,n){
+  const gs=stage.gens, per=Math.ceil(n/gs.length)+3;
+  const pools=gs.map(g=>(GEN[g]||GEN.g1)(per));
+  const out=[];
+  for(let i=0;i<n;i++){const p=pools[i%gs.length];out.push(p[Math.floor(i/gs.length)%p.length]);}
+  return out;
+}
+
+
+
+const WORDS={
+  g1:['run','fly','sleep','jump','swim','sing','smile','sit','walk','cry','dog','bird','cat','rabbit','frog','horse'],
+  g2:['dogs','a book','an apple','a toy','a pet','a star','a cake','soccer','a picture','a movie','a ball','a key','a bike','the door'],
+  g3:['big','small','red','fast','pretty','old','new','tall','cute','long','brave','kind','funny','quiet'],
+  g4:['in the park','at home','at school','in the garden','in the sea','in the morning','at night','after school','on Sunday','by the river','before dinner','every day'],
+  g5:['play','read','watch','walk','help','cook','paint','clean','yesterday','tomorrow','now','last night','next week'],
+  g6:['and','but','so','because'],
+  g7:['to','want','like','need','hope','try','decide','plan','read','play','win','help','learn','swim'],
+  g8:['big','fast','hot','cold','tall','small','heavy','old','strong','than','-er','more','most'],
+  g9:['who','which','that','runs fast','sings well','helps','reads','boy','girl','man','teacher','friend'],
+  g10:['make','keep','call','find','name','paint','happy','sad','clean','warm','easy','laugh']
+};
+const THINK={
+ whodidwhat:[['Who','누가'],['Did','무엇을 했나'],['What','무엇을']],
+ wwww:[['Who?','누가'],['When?','언제'],['Where?','어디서'],['What happened?','무슨 일이']],
+ bme:[['Beginning','처음'],['Middle','중간'],['End','끝']],
+ story:[['Setting','배경'],['Characters','인물'],['Plot','사건 흐름']],
+ ce:[['Cause','원인'],['Effect','결과'],['So…','그래서']],
+ fo:[['Fact','사실'],['Opinion','내 의견'],['My reason','그 이유']],
+ ps:[['Problem','문제'],['Solution','해결'],['Result','결과']],
+ mainidea:[['Main Idea','중심 생각'],['Key details','뒷받침'],['Why important','왜 중요한가']],
+ purpose:[["Author's Purpose",'작가의 의도'],['Evidence','근거'],['My critique','내 평가']]
+};
+const CRIT={
+ g7:[['My opinion','내 주장'],['Reasons','근거'],['Conclusion','결론']],
+ g8:[['My opinion','내 주장'],['Reason 1','근거 1'],['Reason 2','근거 2'],['Conclusion','결론']],
+ g9:[['My opinion','내 주장'],['Reason 1','근거 1'],['Reason 2','근거 2'],['Example','예시'],['Conclusion','결론']],
+ g10:[['My opinion','내 주장'],['Reason 1','근거 1'],['Reason 2','근거 2'],['Counterpoint','반론도 생각해요'],['Example','예시'],['Conclusion','결론']]
+};
+const THINKKEY={s1:'whodidwhat',s2:'whodidwhat',s3:'wwww',s4:'bme',s5:'story',s6:'ce',s7:'fo',s8:'ps',s9:'mainidea',s10:'purpose'};
+const CRITKEY={s7:'g8',s8:'g9',s9:'g10',s10:'g10'};
+Object.assign(WORDS,{
+ be:['am','is','are','happy','kind','tall','smart','tired','hungry','brave','young','busy'],
+ adv:['quickly','slowly','quietly','happily','carefully','loudly','well','hard','softly','suddenly'],
+ quant:['many','a lot of','some','a few','three','several','no','two'],
+ fut:['will','play','read','watch','help','tomorrow','next week','soon'],
+ perf:['have','eaten','seen','done','read','finished','gone','made','written','found'],
+ ques:['Do','Does','Did'],
+ neg:["don't","doesn't","not"],
+ can:['can',"can't",'swim','run','read','help','sing','draw'],
+ must:['must','should','have to','study','sleep','help','wait'],
+ modwill:['will','may','go','come','rain','start'],
+ ger:['swimming','reading','running','singing','cooking','playing','drawing','dancing'],
+ that:['that'],
+ asas:['as','tall','big','fast','small','strong','old'],
+ sup:['biggest','fastest','tallest','smallest','oldest','best','highest','funniest'],
+ part:['running','sleeping','crying','broken','painted','singing','flying','closed'],
+ partcl:['walking','reading','feeling','hearing','opening','smiling'],
+ pass:['is made','was built','is loved','was found','is used','was written'],
+ reladv:['where','when','why','how'],
+ indir:['where','what','why','how','who','when'],
+ subj:['if','would','had','were','could']
+});
+const EASY={
+ g1:['누가 + 무엇하다','The dog runs'],
+ be:['누가 + 어떠하다','She is happy'],
+ g2:['누가 + 무엇을 하다','I like dogs'],
+ g3:['꾸미는 말 넣기','a big dog'],
+ g4:['어디서·언제 넣기','runs in the park'],
+ adv:['어떻게(부사)','runs fast'],
+ quant:['얼마나 많이','many books'],
+ g5:['때 바꾸기(과거·미래)','I played / will play'],
+ fut:['앞으로 할 일','I will go'],
+ perf:['해본 적 있다','I have seen it'],
+ ques:['물어보기','Do you like it?'],
+ neg:['아니라고 하기',"I don't like it"],
+ g6:['두 문장 잇기','I ran and I won'],
+ can:['할 수 있다','I can swim'],
+ must:['해야 한다','I must go'],
+ modwill:['할 것이다','I will try'],
+ g7:['~하려고 / ~하기','I run to win'],
+ ger:['~하는 것','Swimming is fun'],
+ that:['~라고 생각해','I think that...'],
+ asas:['~만큼 ~한','as tall as'],
+ g8:['더 ~한(비교)','bigger than'],
+ sup:['가장 ~한','the biggest'],
+ part:['꾸미는 ~ing/~ed','the running dog'],
+ partcl:['~하면서','Walking home, ...'],
+ pass:['~되다(당하다)','It is made'],
+ g9:['누구·무엇 꾸미기','the boy who runs'],
+ reladv:['장소·때 꾸미기','the place where...'],
+ indir:['~인지 알다','I know what he wants'],
+ g10:['~를 ~하게 만들다','It makes me happy'],
+ subj:['만약 ~라면','If I were...']
+};
+const CARDS={
+ g1:[['주인공','who'],['동작','did']],
+ g2:[['주인공','who'],['동작','did'],['대상','what']],
+ g3:[['주인공','who'],['동작','did'],['대상','what']],
+ g4:[['주인공','who'],['동작','did'],['어디서·언제','what']],
+ be:[['주인공','who'],['상태(어때)','be']]
+};
+const MW={s1:'MW 1권 (1.1·1.2)',s2:'MW 2권 (2.1·2.2)',s3:'MW 3권 (3.1·3.2)',s4:'MW 4권 (4.1·4.2)',s5:'MW 5권 (5.1·5.2)',s6:'MW 6권 (6.1·6.2)',s7:'MW 7권 (7.1·7.2)',s8:'MW 8권 (8.1)',s9:'EPL 통합',s10:'EPL 비판적 글쓰기'};
+const FRAMES={
+ sprout:{name:'Sprout · 단어로 문장 만들기',open:'There is',r1:'I see',r2:'I like',lines:4},
+ explorer:{name:'Explorer · 이야기 다시 쓰기',open:'First,',r1:'Then,',r2:'Finally,',lines:5},
+ storyteller:{name:'Storyteller · 설명하는 북리뷰',open:'This story is about',r1:'It is important because',r2:'This part shows that',lines:9},
+ thinker:{name:'Thinker · 분석하고 판단하기',open:'I think the author wants to show',r1:'One reason is',r2:'Another reason is',lines:11},
+ creator:{name:'Creator · 종합 에세이',open:'The main idea is',r1:'The author wants to show',r2:'I believe',lines:11}
+};
+const FRAMEKEY={s1:'sprout',s2:'sprout',s3:'explorer',s4:'storyteller',s5:'storyteller',s6:'storyteller',s7:'thinker',s8:'thinker',s9:'creator',s10:'creator'};
+const sel=document.getElementById('stage');
+sel.innerHTML=STAGES.map(s=>`<option value="${s.id}">${s.stage} · ${s.nm} (${s.sub})</option>`).join('');
+const findStage=id=>STAGES.find(s=>s.id===id);
+
+function fzLines(n){let s='';for(let i=0;i<n;i++)s+='<div class="fl"></div>';return s;}
+const LOGO=`<div class="logo"><b>EPL</b>원서읽는 아이들 영어학원</div>`;
+const FB=`<div class="fb"><div class="checks"><span>구조</span><span>때</span><span>철자</span><span>논리 흐름</span></div><div class="stamp">선생님<br>도장</div></div>`;
+
+function spiralPlan(st, want){
+  const g=st.gens, plan=[];
+  g.forEach((k,i)=>plan.push({focus:k, learned:g.slice(0,i+1), n:i+1}));
+  plan.push({focus:null, learned:g.slice(), n:g.length+1, integrate:true});
+  const lvl=parseInt(st.id.slice(1),10);
+  if(lvl>=8) plan.push({focus:null, learned:g.slice(), n:g.length+2, integrate:true});
+  const base=plan.length;
+  // 장수(want)만큼 단원을 만들도록 스파이럴 사이클을 반복
+  if(want && want>base){
+    for(let i=base;i<want;i++){
+      const k=g[i%g.length];
+      const isInt=(i%(g.length+1)===g.length); // 사이클마다 통합 1회
+      plan.push(isInt
+        ? {focus:null, learned:g.slice(), n:i+1, integrate:true}
+        : {focus:k, learned:g.slice(0,(i%g.length)+1), n:i+1});
+    }
+  }
+  return plan.slice(0, want||base).map((u,idx)=>({...u, n:idx+1}));
+}
+const ENST={
+ s1:{n:'Basic Sentences',s:'Subject + Verb · Object · Be + State'},
+ s2:{n:'Modifiers & Past',s:'Adjectives · Adverbs · Past Tense'},
+ s3:{n:'Negatives & Questions',s:'Negation · Questions · Wh-words'},
+ s4:{n:'Future & Modals',s:'Will · Can · Must'},
+ s5:{n:'Comparison & Quantity',s:'Quantity · Comparative · Superlative'},
+ s6:{n:'To-infinitive, Gerund & Linking',s:'To-infinitive · Gerund · Conjunctions'},
+ s7:{n:'Sentence Patterns & Perfect',s:'Five Patterns · That-clause · Present Perfect'},
+ s8:{n:'Passive & Relatives',s:'Passive · Relative Pronoun · Relative Adverb'},
+ s9:{n:'Integrated Writing',s:'Combining Learned Structures'},
+ s10:{n:'Critical Writing',s:'Claim · Evidence · Counter · Conclusion'}
+};
+function cover(st){
+  const e=ENST[st.id]||{n:st.nm,s:st.sub};
+  return `<div class="sheet cover">
+    <div class="cv-brand">EPL · Empower · Practice · Literacy</div>
+    <div class="cv-title">EPL Writing Builder</div>
+    <div class="cv-sub">Thinking-Based English · Reading Words → Sentence Structure → Logical Thinking → Writing</div>
+    <div class="cv-stage">Level ${st.id.slice(1)} · ${e.n}</div>
+    <div class="cv-struct">${e.s}</div>
+    <div class="cv-meta">Name ____________   ·   Date ____________</div>
+  </div>`;
+}
+function curriculum(st,plan){
+  const g=st.gens, cyc=g.length+1, cycles=Math.ceil(plan.length/cyc);
+  let rows='';
+  g.forEach((k,i)=>{
+    const tag = i===0?'➕ 새 구조':'➕';
+    const rev = i>0 ? '<span class="cu-rev">복습 '+g.slice(0,i).map(x=>EASY[x][0]).join(' · ')+'</span>' : '';
+    rows += '<div class="cu-row"><span class="cu-n">'+tag+'</span><span class="cu-f">'+EASY[k][0]+' <i>'+EASY[k][1]+'</i></span>'+rev+'</div>';
+  });
+  rows += '<div class="cu-row"><span class="cu-n">🔁 통합</span><span class="cu-f">배운 구조 모두 합쳐 길게 쓰기 <i>'+st.sub+'</i></span><span class="cu-rev">My Writing</span></div>';
+  return `<div class="sheet">
+    <div class="block-h">Table of Contents <span>${st.stage} ${st.nm}</span></div>
+    <div class="loopbox">📖 <b>Reading Words</b> → 🧩 <b>Sentence Structure</b> → 🧠 <b>Logical Thinking</b> → ✍️ <b>Writing</b><small>EPL Thinking-Based English · 4-Step Writing Process</small></div>
+    <div class="cu-intro">아래는 <b>1사이클</b>(반복 단위)입니다. 한 구조를 배우고 → 복습하며 더하고 → 통합해 길게 씁니다. 중심은 <b>Reading Words → Writing</b>, <b>Logical Thinking</b>은 모든 단원 필수.</div>
+    <div class="cu-cyc">1 Cycle = ${cyc}단원</div>
+    <div class="cu">${rows}</div>
+    <div class="cu-foot">이 사이클을 <b>${cycles}회 반복</b> · 총 <b>${plan.length}단원</b> (회차마다 책 단어·문장은 새로 생성)</div>
+    ${LOGO}
+  </div>`;
+}
+function unit(st,u){
+  const idx=u.n-1, lvl=parseInt(st.id.slice(1),10);
+  const FR=FRAMES[FRAMEKEY[st.id]||'sprout'];
+  const focus=u.focus;
+  const model = focus ? (GEN[focus]||GEN.g1)(1)[0] : genItems(st,1)[0];
+  const cardSlots = focus ? (CARDS[focus]||[]) : [];
+  const cards=cardSlots.map(s=>`<div class="card ${s[1]}"><div class="lab">${s[0]}</div></div>`).join('');
+  const focusName = focus? EASY[focus][0] : '배운 구조 통합';
+  const focusEx = focus? EASY[focus][1] : st.sub;
+  const newTag = u.integrate? '🔁 통합' : '➕ 새 구조';
+  const learnedChips=u.learned.map(g=>`<span class="uchip">☐ ${EASY[g][0]} <i>${EASY[g][1]}</i></span>`).join('');
+  const useStruct=`<div class="usebox"><span class="ut">✓ 배운 표현을 글에 써 보세요${u.integrate?' — 가능한 많이!':' (2개 이상)'}</span><div class="uchips">${learnedChips}</div></div>`;
+  const bwSlots=Array.from({length:10}).map((_,i)=>`<div class="bw"><span class="bwn">${i+1}</span></div>`).join('');
+  const readbox=`<div class="readbox"><div class="bwh">📖 오늘 읽은 책에서 나온 단어 10개 <span>읽으면서 만난 단어를 적고, 그 단어로 아래 문장을 만들어요</span></div><div class="bwgrid">${bwSlots}</div></div>`;
+  const thinkRows=(THINK[THINKKEY[st.id]]||THINK.whodidwhat).map(t=>`<div class="row"><div class="q">${t[0]}<small>${t[1]}</small></div><div class="l"></div></div>`).join('');
+  const mk=Array.from({length:9}).map((_,i)=>`<div class="mk"><span class="mn">${i+1}</span><div class="ml"></div></div>`).join('');
+
+  const pageA=`<div class="sheet">
+    <div class="top"><div class="bk">${st.stage} · ${st.nm}</div><div class="no">Unit ${u.n} · ${newTag}</div></div>
+    ${readbox}
+    <div class="struct"><div class="nm">${focusName}</div><div class="sub">${focusEx}　·　예) ${model.en} (${model.ko})</div></div>
+    ${cards?`<div class="cards">${cards}</div>`:''}
+    <div class="block-h">구조 연습 <span>위에 적은 책 단어로 「${focusName}」 문장을 만들어요</span></div>
+    <div class="makelist">${mk}</div>
+    ${LOGO}
+  </div>`;
+
+  const adv = u.integrate && lvl>=9;
+  if(!adv){
+    const metaRow=`<div class="sf-meta"><span>제목 Title</span><u></u><span>작가 Author</span><u></u></div>`;
+    if(lvl<=4){
+      const pageB=`<div class="sheet">
+        <div class="top"><div class="bk">${st.nm}</div><div class="no">Unit ${u.n} · Write</div></div>
+        <div class="block-h">Logical Writing · 생각 조직 <span>노트 조직자로 읽은 내용을 정리해요</span></div>
+        <div class="think">${thinkRows}</div>
+        <div class="block-h">My Writing <span>${FR.name}</span></div>
+        ${metaRow}
+        ${useStruct}
+        <div class="sl"><span class="st">${FR.open}</span><span class="sline"></span></div>
+        <div class="fillzone">${fzLines(FR.lines)}</div>
+        <div class="sl"><span class="st">${FR.r1}</span><span class="sline"></span></div>
+        <div class="sl"><span class="st">${FR.r2}</span><span class="sline"></span></div>
+        ${FB}${LOGO}
+      </div>`;
+      return pageA+pageB;
+    }
+    const thinkPage=`<div class="sheet">
+      <div class="top"><div class="bk">${st.nm}</div><div class="no">Unit ${u.n} · 생각 조직</div></div>
+      <div class="block-h">Logical Writing · 생각 조직 <span>노트 조직자로 정리 → 다음 장에 길게 써요</span></div>
+      <div class="think spread">${thinkRows}</div>${LOGO}
+    </div>`;
+    const writePage=`<div class="sheet">
+      <div class="top"><div class="bk">${st.nm}</div><div class="no">Unit ${u.n} · My Writing</div></div>
+      <div class="block-h">My Writing <span>${FR.name}</span></div>
+      ${metaRow}
+      ${useStruct}
+      <div class="sl"><span class="st">${FR.open}</span><span class="sline"></span></div>
+      <div class="fillzone">${fzLines(14)}</div>
+      <div class="sl"><span class="st">${FR.r1}</span><span class="sline"></span></div>
+      <div class="sl"><span class="st">${FR.r2}</span><span class="sline"></span></div>
+      ${FB}${LOGO}
+    </div>`;
+    return pageA+thinkPage+writePage;
+  }
+  const pageB=`<div class="sheet">
+    <div class="top"><div class="bk">${st.nm}</div><div class="no">Unit ${u.n} · 생각</div></div>
+    <div class="block-h">Logical Writing · 생각 조직 <span>노트 조직자로 정리 → 다음 장에 써요</span></div>
+    <div class="think spread">${thinkRows}</div>${LOGO}
+  </div>`;
+  const secs=CRIT[CRITKEY[st.id]]||CRIT.g7;
+  const budget=28, per=Math.floor(budget/secs.length), rem=budget%secs.length;
+  const secHTML=secs.map((s,i)=>{let ln='';const cnt=per+(i<rem?1:0);for(let k=0;k<cnt;k++)ln+='<div class="nl"></div>';return `<div class="csec2"><div class="clab">${s[0]}<small>${s[1]}</small></div>${ln}</div>`;}).join('');
+  const pageC=`<div class="sheet">
+    <div class="top"><div class="bk">${st.nm}</div><div class="no">Unit ${u.n} · Critical Writing</div></div>
+    <div class="block-h">Critical Writing · 깊이 있는 글쓰기 <span>원서에 대한 내 생각을 주장·근거로</span></div>
+    <div class="sf-meta"><span>제목 Title</span><u></u><span>작가 Author</span><u></u></div>
+    ${useStruct}
+    <div class="sl"><span class="st">I think this book is</span><span class="sline"></span></div>
+    ${secHTML}
+    ${FB}${LOGO}
+  </div>`;
+  return pageA+pageB+pageC;
+}
+function generate(){
+  const st=findStage(sel.value);
+  const want=Math.max(1,Math.min(60,parseInt((document.getElementById('count')||{}).value)||0));
+  const plan=spiralPlan(st, want);
+  let html=cover(st)+curriculum(st,plan);
+  plan.forEach(u=>html+=unit(st,u));
+  document.getElementById('out').innerHTML=html;
+  const status=document.getElementById('status'); if(status) status.textContent=`${st.stage} ${st.nm} 워크북 · ${plan.length}단원 (반복→확장)`;
+  const f=document.querySelector('.sheet'); if(f) window.scrollTo({top:f.offsetTop-90,behavior:'smooth'});
+}
+generate();
+
+</script>
+</body>
+</html>
