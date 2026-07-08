@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EPL 라이팅빌더 · 생성기</title>
+<title>EPL Studio · 라이팅빌더 + 평가지</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -96,7 +96,22 @@ body{margin:0;background:#E7E2D8;color:var(--ink);font-family:'IBM Plex Sans KR'
 .usebox .uchip{font-size:12.5px;color:var(--ink);}
 .usebox .uchip i{font-family:'Fraunces',serif;font-style:italic;color:var(--soft);font-size:12px;margin-left:3px;}
 /* 워크북: 표지·커리큘럼·원서 박스 */
-.cover{justify-content:center;align-items:center;text-align:center;}
+/* ===== 딥톤 컬러블록 표지 ===== */
+.cover.deep{padding:0;display:flex;flex-direction:column;overflow:hidden;}
+.cv-top{height:33%;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#fff;}
+.cv-brandmark{font-family:'Fraunces',serif;font-weight:700;font-size:26px;letter-spacing:6px;color:var(--ink);}
+.cv-brandsub{font-size:10px;letter-spacing:4px;color:var(--soft);margin-top:6px;}
+.cv-block{flex:1;background:var(--acc);position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;padding:44mm 24mm 18mm;}
+.cv-symwrap{width:118px;height:118px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin-top:-59px;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+.cv-sym{width:66px;height:66px;color:var(--acc);}
+.cv-sym svg{width:100%;height:100%;display:block;background:transparent;overflow:visible;border:none;outline:none;fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;}
+.cv-block .cv-badge{margin-top:0;font-family:'Fraunces',serif;font-size:13px;letter-spacing:6px;color:var(--sub);}
+.cv-lvtitle{font-family:'Fraunces',serif;font-weight:700;font-size:40px;color:#fff;line-height:1.1;margin-top:14px;padding:0 6px;}
+.cv-block .cv-struct{font-size:13px;color:var(--sub);margin-top:12px;}
+.cv-rule{width:48px;height:2.5px;background:var(--sub);margin:22px auto;}
+.cv-loop{font-size:11px;color:var(--sub);opacity:.9;letter-spacing:.3px;}
+.cv-prod{font-family:'Fraunces',serif;font-style:italic;font-size:13px;color:var(--sub);margin-top:auto;padding-top:22px;}
+.cv-block .cv-meta{margin-top:14px;font-size:11px;color:#fff;background:rgba(255,255,255,.14);border-radius:5px;padding:7px 0;width:74%;}
 .cv-brand{font-size:12px;color:var(--soft);letter-spacing:2px;margin-bottom:46px;}
 .cv-title{font-family:'Fraunces',serif;font-weight:600;font-size:46px;line-height:1.1;}
 .cv-sub{font-size:15px;color:var(--soft);margin-top:12px;}
@@ -127,12 +142,27 @@ body{margin:0;background:#E7E2D8;color:var(--ink);font-family:'IBM Plex Sans KR'
 .mk .ml{flex:1;border-bottom:1px solid var(--line);height:22px;}
 .sf-meta{display:flex;align-items:baseline;gap:6px;font-size:13px;color:var(--ink);margin:8px 0 4px;flex-wrap:wrap;}
 .sf-meta span{color:var(--soft);font-size:12px;}
-.sf-meta u{display:inline-block;border-bottom:1px solid var(--line-2);min-width:130px;margin-right:16px;}
-.sl{display:flex;align-items:flex-end;gap:8px;margin-top:11px;}
+.sf-meta u{display:inline-block;border-bottom:1px solid var(--line-2);min-width:210px;margin-right:16px;}
+.sf-meta2{margin:12px 0 6px;}
+  .sf-meta2 .mrow{display:flex;align-items:flex-end;gap:8px;margin-bottom:12px;}
+  .sf-meta2 .mrow span{font-size:12px;color:var(--soft);white-space:nowrap;}
+  .sf-meta2 .mrow u{flex:1;border-bottom:1px solid var(--line-2);height:22px;text-decoration:none;}
+  .sl{display:flex;align-items:flex-end;gap:8px;margin-top:16px;}
 .sl .st{font-family:'Fraunces',serif;font-style:italic;color:var(--soft);font-size:14px;white-space:nowrap;}
-.sl .sline{flex:1;border-bottom:1px solid var(--line);height:24px;}
+.sl .sline{flex:1;border-bottom:1px solid var(--line);height:32px;}
 
-.fb{margin-top:24px;border-top:1px solid var(--line);padding-top:12px;display:flex;justify-content:space-between;align-items:center;color:var(--soft);font-size:12.5px;}
+.fb{margin-top:20px;border-top:1px solid var(--line);padding-top:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;}
+  .fbgrid{flex:1;}
+  .fbhead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+  .fbc{font-family:'Fraunces',serif;font-weight:600;font-size:12.5px;color:var(--ink);}
+  .fbkey{font-size:10px;color:var(--soft);}
+  .fbkey i{color:var(--did);font-style:normal;}
+  .fbrow{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px dotted var(--line);}
+  .fbcrit{font-size:12px;color:var(--ink);}
+  .fbcrit em{color:var(--soft);font-style:normal;font-size:11px;margin-left:2px;}
+  .fbscale{display:flex;gap:10px;}
+  .fbscale .lvl{width:22px;height:22px;border:1.4px solid var(--line-2);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--soft);}
+  .DUMMYfb{align-items:center;color:var(--soft);font-size:12.5px;}
 .fb .checks{display:flex;gap:14px;flex-wrap:wrap;}
 .fb .checks span{display:inline-flex;align-items:center;gap:5px;}
 .fb .checks span::before{content:"";width:13px;height:13px;border:1.4px solid var(--line-2);border-radius:3px;}
@@ -142,12 +172,104 @@ body{margin:0;background:#E7E2D8;color:var(--ink);font-family:'IBM Plex Sans KR'
 
 @media print{@page{size:A4;margin:0;}html,body{background:#fff;margin:0;padding:0;}.controls{display:none;}#out{padding:0;margin:0;}.sheet{width:210mm;height:296mm;max-width:none;margin:0;box-shadow:none;overflow:hidden;page-break-after:always;break-after:page;}.sheet:last-child{page-break-after:auto;break-after:auto;}}
 @media(max-width:680px){.sheet{padding:28px 20px;}.exlist .ex{flex-wrap:wrap;}.exlist .ex .ko{text-align:left;flex:1;}}
+
+/* ===== 통합 모드 ===== */
+.view{display:none;}
+.view.active{display:block;}
+.mode-bar{position:sticky;top:0;z-index:20;background:#1f1b17;color:#fff;padding:9px 18px;display:flex;gap:10px;align-items:center;}
+.mode-bar .mb-title{font-family:'Fraunces',serif;font-weight:600;font-size:15px;margin-right:10px;letter-spacing:.5px;}
+.mode-bar .mb-btn{font-family:'IBM Plex Sans KR',sans-serif;font-size:13px;padding:6px 14px;border-radius:20px;border:1px solid #4a423a;background:transparent;color:#c9bfb4;cursor:pointer;}
+.mode-bar .mb-btn.active{background:#9a5b3f;color:#fff;border-color:#9a5b3f;}
+@media print{.mode-bar{display:none !important;}}
+/* ===== 평가지(격리) ===== */
+#asmt-view .bar{position:sticky;top:0;z-index:9;background:#2b2622;color:#fff;padding:12px 18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+#asmt-view .bar select, #asmt-view .bar button{font-family:inherit;font-size:13px;padding:7px 12px;border-radius:7px;border:none;}
+#asmt-view .bar select{background:#3b352f;color:#fff;border:1px solid #554d45;}
+#asmt-view .bar button{background:var(--did);color:#fff;font-weight:600;cursor:pointer;}
+#asmt-view .bar .t{font-family:'Fraunces',serif;font-weight:600;font-size:15px;margin-right:8px;}
+#asmt-view .bar .st{font-size:11px;color:#c9bfb4;margin-left:auto;}
+#asmt-view #asOut{padding:18px 0;}
+#asmt-view .sheet{background:#fff;width:210mm;max-width:96vw;margin:16px auto;padding:15mm 16mm;box-shadow:0 3px 22px rgba(0,0,0,.12);height:296mm;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden;position:relative;}
+#asmt-view .top{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--ink);padding-bottom:8px;margin-bottom:12px;}
+#asmt-view .top .bk{font-family:'Fraunces',serif;font-weight:600;font-size:18px;}
+#asmt-view .top .no{font-size:11px;color:var(--soft);letter-spacing:1px;}
+#asmt-view h2{font-family:'Fraunces',serif;font-weight:600;font-size:15px;margin:2px 0 3px;}
+#asmt-view .lead{font-size:11.5px;color:var(--soft);margin-bottom:10px;line-height:1.6;}
+#asmt-view .meta{display:flex;gap:20px;font-size:11px;color:var(--soft);margin-bottom:10px;}
+#asmt-view .meta u{display:inline-block;min-width:90px;border-bottom:1px solid var(--line-2);}
+#asmt-view .items{flex:1;display:flex;flex-direction:column;justify-content:space-around;}
+#asmt-view .it{font-size:13px;line-height:1.5;}
+#asmt-view .it .n{font-family:'Fraunces',serif;font-style:italic;color:var(--did);margin-right:7px;}
+#asmt-view .it .ans{height:22px;border-bottom:1px solid var(--line);margin-top:6px;}
+#asmt-view .bl{display:inline-block;min-width:60px;border-bottom:1.3px solid var(--soft);vertical-align:baseline;margin:0 3px;}
+#asmt-view .modelbox{background:var(--paper);border:1px solid var(--line-2);border-radius:8px;padding:10px 14px;margin-bottom:12px;display:flex;flex-direction:column;gap:5px;}
+#asmt-view .modelbox span{font-family:'Fraunces',serif;font-size:13.5px;color:var(--ink);}
+#asmt-view .modelbox span::before{content:"“";color:var(--soft);}
+#asmt-view .modelbox span::after{content:"”";color:var(--soft);}
+#asmt-view .ecue{font-size:11px;color:var(--did);font-style:normal;}
+#asmt-view .ehint{font-size:11px;color:var(--soft);margin:2px 0 8px;line-height:1.5;}
+#asmt-view .ehint i{font-family:'Fraunces',serif;color:var(--ink);}
+#asmt-view .subh{font-family:'Fraunces',serif;font-weight:600;font-size:12.5px;color:var(--did);margin:10px 0 2px;}
+#asmt-view .passage{background:var(--paper);border-left:3px solid var(--did);padding:11px 14px;font-size:12.5px;line-height:1.7;border-radius:0 6px 6px 0;margin-bottom:12px;}
+#asmt-view .org{display:grid;gap:10px;flex:1;}
+#asmt-view .org.c3{grid-template-columns:repeat(3,1fr);}
+#asmt-view .org.c4{grid-template-columns:repeat(2,1fr);}
+#asmt-view .ocell{border:1px solid var(--line-2);border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;}
+#asmt-view .ocell .lab{font-family:'Fraunces',serif;font-weight:600;font-size:12.5px;color:var(--did);margin-bottom:5px;}
+#asmt-view .ocell .fill{flex:1;display:flex;flex-direction:column;justify-content:space-around;}
+#asmt-view .ocell .fl{height:20px;border-bottom:1px solid var(--line);}
+#asmt-view .wf{flex:1;display:flex;flex-direction:column;}
+#asmt-view .wl{height:26px;border-bottom:1px solid var(--line);}
+#asmt-view .wfw{flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:6px 0 12px;}
+#asmt-view .wlw{border-bottom:1px solid var(--line);}
+#asmt-view .wzone{margin-top:12px;display:flex;flex-direction:column;gap:34px;}
+#asmt-view .wzone.wfw{flex:1;justify-content:space-between;gap:0;}
+#asmt-view .wzone.wfw .wrow{flex:0 0 auto;}
+#asmt-view .wzone.wfw .wl2{flex:1;min-height:34px;}
+#asmt-view .wzone.wfw .wrow .wl2{flex:0 0 auto;height:0;margin-top:8px;}
+#asmt-view .wrow{display:flex;flex-direction:column;gap:8px;}
+#asmt-view .wrow .starter{font-family:'Fraunces',serif;font-style:italic;color:var(--soft);font-size:14px;}
+#asmt-view .wl2{border-bottom:1px solid var(--line);height:0;}
+#asmt-view .wzone .wl2{margin-top:30px;}
+#asmt-view .wzone.wfw .wl2{margin-top:0;}
+#asmt-view .sf-meta{display:flex;gap:8px;font-size:11px;color:var(--soft);margin:6px 0 8px;}
+#asmt-view .sf-meta u{display:inline-block;min-width:210px;border-bottom:1px solid var(--line-2);}
+#asmt-view .starter{font-family:'Fraunces',serif;font-style:italic;color:var(--soft);font-size:12.5px;}
+#asmt-view table{width:100%;border-collapse:collapse;font-size:11.5px;}
+#asmt-view th{background:var(--paper);text-align:left;padding:8px;border-bottom:1.5px solid var(--line-2);font-size:11px;}
+#asmt-view td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top;}
+#asmt-view .keycols{display:flex;gap:10px;margin-top:6px;}
+#asmt-view .keycols table{flex:1;}
+#asmt-view .keycols th, #asmt-view .keycols td{padding:5px 6px;font-size:10px;}
+#asmt-view .crit{background:var(--paper);border-left:3px solid var(--did);padding:10px 13px;font-size:12px;line-height:1.7;border-radius:0 6px 6px 0;margin-top:10px;}
+#asmt-view .crit b{color:var(--did);}
+#asmt-view .box{border:1px solid var(--line-2);border-radius:8px;padding:10px 13px;margin-top:10px;}
+#asmt-view .sign{display:flex;justify-content:flex-end;gap:26px;margin-top:14px;font-size:12px;color:var(--soft);}
+#asmt-view .sign u{display:inline-block;min-width:90px;border-bottom:1px solid var(--line-2);}
+#asmt-view .foot{position:absolute;bottom:9mm;right:16mm;font-family:'Fraunces',serif;font-size:10px;color:var(--soft);}
+#asmt-view .foot b{color:var(--did);}
+#asmt-view .foot2{position:absolute;bottom:9mm;left:16mm;font-size:10px;color:var(--soft);}
+#asmt-view .lv{font-family:'Fraunces',serif;font-style:italic;color:var(--did);font-weight:600;white-space:nowrap;}
+@media print{
+@page{size:A4;margin:0;}
+
+#asmt-view .bar{display:none;}
+#asmt-view #asOut{padding:0;}
+#asmt-view .sheet{width:210mm;height:296mm;max-width:none;margin:0;box-shadow:none;overflow:hidden;page-break-after:always;break-after:page;}
+#asmt-view .sheet:last-child{page-break-after:auto;}
+}
 </style>
 </head>
 <body>
 
+<div class="mode-bar">
+  <span class="mb-title">EPL Studio</span>
+  <button id="mbWb" class="mb-btn active">📗 워크북</button>
+  <button id="mbAs" class="mb-btn">📝 평가지</button>
+</div>
+<div id="wbld-view" class="view active">
 <div class="controls">
-  <div class="title">EPL 라이팅빌더 · 생성기 <span>구조 단계를 고르면 그 단계의 북라이팅 노트를 자동 생성</span></div>
+  <div class="title">EPL 라이팅빌더 <span>레벨을 고르면 원서 기반 라이팅 워크북을 자동 생성합니다</span></div>
   <div class="crow">
     <div class="fld"><label>구조 단계 (1~5)</label><select id="stage" style="min-width:280px;"></select></div>
     <div class="fld"><label>장수 (회차)</label><input type="number" id="count" value="16" min="1" max="60"></div>
@@ -157,26 +279,50 @@ body{margin:0;background:#E7E2D8;color:var(--ink);font-family:'IBM Plex Sans KR'
   </div>
 </div>
 <div id="out"></div>
+</div>
+<div id="asmt-view" class="view">
+<div class="bar">
+  <span class="t">EPL 평가지 생성기</span>
+  <select id="type">
+    <option value="place">배치고사 (Placement)</option>
+    <option value="p1">승급테스트 · Level 1 (Sprout)</option>
+    <option value="p2">승급테스트 · Level 2 (Sprout)</option>
+    <option value="p3">승급테스트 · Level 3 (Explorer)</option>
+    <option value="p4">승급테스트 · Level 4 (Explorer)</option>
+    <option value="p5">승급테스트 · Level 5 (Storyteller)</option>
+    <option value="p6">승급테스트 · Level 6 (Storyteller)</option>
+    <option value="p7">승급테스트 · Level 7 (Thinker)</option>
+    <option value="p8">승급테스트 · Level 8 (Thinker)</option>
+    <option value="p9">승급테스트 · Level 9 (Creator)</option>
+    <option value="p10">승급테스트 · Level 10 (Creator)</option>
+  </select>
+  <button id="asRunBtn">만들기</button>
+  <button id="asPrintBtn">🖨 인쇄 / PDF</button>
+  <span class="st" id="asStatus"></span>
+</div>
+<div id="asOut"></div>
+</div>
+
 
 <script>
 /* 5단계 (2개씩 통합) — 문법은 예문으로 구체화 */
 const STAGES=[
- {id:'s1',stage:'1단계',nm:'기본 문장',sub:'주어+동사 · 무엇을 · be+상태',gens:['g1','g2','be'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
- {id:'s2',stage:'2단계',nm:'수식어·과거',sub:'형용사 · 부사 · 과거형',gens:['g3','adv','g5'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
- {id:'s3',stage:'3단계',nm:'부정·의문',sub:'부정문 · 의문문 · 의문사',gens:['neg','ques','indir'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
- {id:'s4',stage:'4단계',nm:'미래·조동사',sub:'미래(will) · can · must',gens:['fut','can','must'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
- {id:'s5',stage:'5단계',nm:'비교·수량',sub:'수량 · 비교급 · 최상급',gens:['quant','g8','sup'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
+ {id:'s1',stage:'1단계',nm:'기본 문장',sub:'주인공+동작 · 대상 · 상태',gens:['g1','g2','be','agree'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
+ {id:'s2',stage:'2단계',nm:'수식어·과거',sub:'꾸미는 말 · 진행형 · 과거',gens:['g3','adv','prog','g5','itsubj'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
+ {id:'s3',stage:'3단계',nm:'부정·의문',sub:'부정문 · 의문문 · 의문사',gens:['neg','ques','indir','refl'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
+ {id:'s4',stage:'4단계',nm:'미래·조동사',sub:'미래 · can · must · may · should · have to',gens:['fut','can','must','may','should','haveto'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
+ {id:'s5',stage:'5단계',nm:'비교·수량',sub:'수량 · 비교급 · 최상급',gens:['quant','g8','sup','mcomp'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
  {id:'s6',stage:'6단계',nm:'to·동명사·연결',sub:'to부정사 · 동명사 · 접속사',gens:['g7','ger','g6'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
- {id:'s7',stage:'7단계',nm:'문장형식·완료',sub:'5형식 · that절 · 현재완료',gens:['g10','that','perf'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
+ {id:'s7',stage:'7단계',nm:'문장형식·완료',sub:'문장 형식(4·5형식) · 지각·사역 · 완료',gens:['g10','that','perf','svoo','perc'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
  {id:'s8',stage:'8단계',nm:'수동·관계사',sub:'수동태 · 관계대명사 · 관계부사',gens:['pass','g9','reladv'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
- {id:'s9',stage:'9단계',nm:'통합 라이팅',sub:'배운 구조 종합',gens:['g2','g7','g8'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
+ {id:'s9',stage:'9단계',nm:'통합 라이팅',sub:'배운 구조 종합',gens:['g2','g7','g8','pastperf'],slots:[['주인공','who'],['동작','did'],['대상','what']]},
  {id:'s10',stage:'10단계',nm:'비판적 글쓰기',sub:'주장·근거·반론·결론',gens:['g10','subj','g9'],slots:[['주인공','who'],['동작','did'],['대상','what']]}
 ];
 /* ===== 조합형 생성 엔진 v2 — 한 장 안에서 주어·단어가 겹치지 않게 순환 배치 ===== */
 const HT=t=>`<span class="hint">(${t})</span>`;
 function sh(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 
-const subjS=[['The dog','개가'],['The cat','고양이가'],['A bird','새가'],['The rabbit','토끼가'],['The boy','소년이'],['The girl','소녀가'],['A frog','개구리가'],['The horse','말이'],['A duck','오리가'],['A monkey','원숭이가'],['The baby','아기가'],['A lion','사자가'],['The fox','여우가'],['A bear','곰이'],['The puppy','강아지가'],['A turtle','거북이가'],['An owl','부엉이가'],['A panda','판다가'],['A pig','돼지가'],['The deer','사슴이'],['A bee','벌이'],['The kitten','새끼고양이가']];
+const subjS=[['The dog','개가'],['The cat','고양이가'],['A bird','새가'],['The rabbit','토끼가'],['The boy','소년이'],['The girl','소녀가'],['A frog','개구리가'],['The horse','말이'],['A duck','오리가'],['A monkey','원숭이가'],['The baby','아기가'],['A lion','사자가'],['The fox','여우가'],['A bear','곰이'],['The puppy','강아지가'],['A turtle','거북이가'],['An owl','부엉이가'],['A panda','판다가'],['A pig','돼지가'],['The deer','사슴이'],['A bee','벌이'],['The kitten','새끼 고양이가']];
 const vbS=[['runs','달려요'],['jumps','뛰어요'],['sleeps','자요'],['eats','먹어요'],['plays','놀아요'],['sings','노래해요'],['smiles','웃어요'],['sits','앉아요'],['walks','걸어요'],['swims','헤엄쳐요'],['cries','울어요'],['dances','춤춰요'],['hides','숨어요'],['rests','쉬어요'],['reads','읽어요'],['claps','박수쳐요'],['yawns','하품해요'],['waves','손 흔들어요']];
 const subjP=[['I','나는'],['We','우리는'],['They','그들은'],['The children','아이들은'],['My friends','친구들은'],['You','너는'],['The kids','꼬마들은'],['Tom and I','Tom과 나는'],['The students','학생들은'],['The twins','쌍둥이는']];
 const vo=[['like','dogs','개를','좋아해요'],['read','a book','책을','읽어요'],['eat','an apple','사과를','먹어요'],['want','a toy','장난감을','원해요'],['have','a pet','반려동물을','키워요'],['see','a star','별을','봐요'],['make','a cake','케이크를','만들어요'],['play','soccer','축구를','해요'],['draw','a picture','그림을','그려요'],['watch','a movie','영화를','봐요'],['catch','a ball','공을','잡아요'],['open','the door','문을','열어요'],['find','a key','열쇠를','찾아요'],['ride','a bike','자전거를','타요'],['paint','a wall','벽을','칠해요'],['build','a tower','탑을','쌓아요']];
@@ -191,7 +337,7 @@ const CL2=[['I slept','잤어요'],['we stayed home','집에 있었어요'],['sh
 const CONJ=['and','but','so','because'];
 const V1=[['want','원하다'],['like','좋아하다'],['need','필요로 하다'],['hope','바라다'],['try','노력하다'],['decide','결정하다'],['plan','계획하다'],['start','시작하다'],['love','정말 좋아하다'],['wish','소망하다']];
 const V2=[['read','읽다'],['play','놀다'],['win','이기다'],['help','돕다'],['learn','배우다'],['swim','수영하다'],['dance','춤추다'],['draw','그리다'],['sing','노래하다'],['cook','요리하다']];
-const NOUNX=[['The dog','개','the cat','고양이'],['An elephant','코끼리','a mouse','쥐'],['A car','차','a bike','자전거'],['The sun','해','the moon','달'],['Summer','여름','winter','겨울'],['Gold','금','silver','은'],['A plane','비행기','a train','기차'],['Today','오늘','yesterday','어제'],['A lion','사자','a cat','고양이'],['The sea','바다','the lake','호수'],['A giraffe','기린','a dog','개'],['Iron','철','wood','나무']];
+const NOUNX=[['The dog','개','the cat','고양이'],['An elephant','코끼리','a mouse','쥐'],['A car','차','a bike','자전거'],['The sun','해','the moon','달'],['Gold','금','silver','은'],['A plane','비행기','a train','기차'],['A lion','사자','a cat','고양이'],['The sea','바다','the lake','호수'],['A giraffe','기린','a dog','개'],['Iron','철','wood','나무']];
 const ADJC=[['big','bigger','큰'],['fast','faster','빠른'],['hot','hotter','뜨거운'],['cold','colder','차가운'],['tall','taller','키 큰'],['small','smaller','작은'],['heavy','heavier','무거운'],['old','older','오래된'],['strong','stronger','힘센'],['light','lighter','가벼운']];
 const PERSON=[['a boy','소년'],['a girl','소녀'],['the man','남자'],['the teacher','선생님'],['my friend','친구'],['a king','왕'],['a doctor','의사'],['the singer','가수']];
 const CLW=[['runs fast','빨리 달리는'],['sings well','노래 잘하는'],['helps people','사람을 돕는'],['reads a lot','책 많이 읽는'],['plays soccer','축구하는'],['lives next door','옆집에 사는'],['paints well','그림 잘 그리는'],['speaks English','영어를 하는']];
@@ -200,7 +346,20 @@ const CLH=[['I like','내가 좋아하는'],['I read','내가 읽은'],['I want'
 const SUBJ10=[['The book','그 책은'],['The sun','해는'],['The news','그 소식은'],['Music','음악은'],['The game','그 게임은'],['This story','이 이야기는'],['The movie','그 영화는'],['Her smile','그녀의 미소는'],['The song','그 노래는'],['The trip','그 여행은']];
 const VC=[['makes','me','happy','나를','행복하게'],['makes','him','sad','그를','슬프게'],['keeps','the room','clean','방을','깨끗하게'],['calls','the dog','Max','개를','Max라고'],['finds','the book','easy','책을','쉽다고'],['names','the cat','Coco','고양이를','Coco라고'],['makes','us','laugh','우리를','웃게'],['keeps','us','warm','우리를','따뜻하게'],['paints','the wall','blue','벽을','파랗게'],['makes','her','smile','그녀를','웃게']];
 
+const fx=(arr,hint)=>(n)=>{const A=sh(arr);const o=[];for(let i=0;i<n;i++){const p=A[i%A.length];o.push({en:`${p[0]}.`,ko:p[1],dr:`${p[0]}.`,hint:hint||''});}return o;};
 const GEN={
+ _fxlist:0,
+ agree:(n)=>fx([['She runs fast','그녀는 빨리 달린다'],['He reads books','그는 책을 읽는다'],['The cat likes fish','고양이는 생선을 좋아한다'],['My friend plays soccer','내 친구는 축구를 한다'],['Tom walks to school','톰은 학교에 걸어간다'],['She eats an apple','그녀는 사과를 먹는다']],'-s')(n),
+ prog:(n)=>fx([['The dog is running','개가 달리고 있다'],['She is reading a book','그녀가 책을 읽고 있다'],['The boy is eating lunch','소년이 점심을 먹고 있다'],['They are playing outside','그들이 밖에서 놀고 있다'],['He is singing a song','그가 노래를 부르고 있다'],['We are watching a movie','우리가 영화를 보고 있다']],'be+~ing')(n),
+ itsubj:(n)=>fx([['It is rainy today','오늘 비가 온다'],['It is sunny','맑다'],['It is cold outside','밖이 춥다'],['It is Monday','월요일이다'],['It is dark now','지금 어둡다'],['It is far from here','여기서 멀다']],'비인칭 it')(n),
+ refl:(n)=>fx([['I did it myself','나는 그것을 직접 했다'],['She hurt herself','그녀는 다쳤다'],['He made it himself','그는 직접 만들었다'],['We enjoyed ourselves','우리는 즐거웠다'],['They helped themselves','그들은 스스로 했다'],['You can do it yourself','너는 스스로 할 수 있다']],'~self')(n),
+ svoo:(n)=>fx([['I gave him a gift','나는 그에게 선물을 주었다'],['She sent me a letter','그녀는 나에게 편지를 보냈다'],['He told us a story','그는 우리에게 이야기를 해주었다'],['My mom bought me lunch','엄마는 나에게 점심을 사주었다'],['The teacher showed them a photo','선생님은 그들에게 사진을 보여주었다'],['I gave her a book','나는 그녀에게 책을 주었다']],'~에게 ~을')(n),
+ perc:(n)=>fx([['I saw him run','나는 그가 뛰는 것을 보았다'],['She let me go','그녀는 나를 가게 했다'],['It made me smile','그것은 나를 웃게 했다'],['We heard her sing','우리는 그녀가 노래하는 것을 들었다'],['He made me laugh','그는 나를 웃게 했다'],['I watched them play','나는 그들이 노는 것을 보았다']],'지각·사역')(n),
+ may:(n)=>fx([['It may rain today','오늘 비가 올지도 모른다'],['She may be late','그녀는 늦을지도 모른다'],['He may know the answer','그는 답을 알지도 모른다'],['It may be true','그것은 사실일지도 모른다'],['They may come soon','그들은 곧 올지도 모른다'],['You may be right','네가 맞을지도 모른다']],'may')(n),
+ should:(n)=>fx([['You should rest','너는 쉬어야 한다'],['We should study hard','우리는 열심히 공부해야 한다'],['He should sleep early','그는 일찍 자야 한다'],['You should try again','너는 다시 시도해야 한다'],['They should help others','그들은 남을 도와야 한다'],['I should go now','나는 지금 가야 한다']],'should')(n),
+ haveto:(n)=>fx([['I have to go now','나는 지금 가야 한다'],['She has to study','그녀는 공부해야 한다'],['We have to leave early','우리는 일찍 떠나야 한다'],['He has to work today','그는 오늘 일해야 한다'],['You have to wait','너는 기다려야 한다'],['They have to finish it','그들은 그것을 끝내야 한다']],'have to')(n),
+ pastperf:(n)=>fx([['I had finished before she came','그녀가 오기 전에 나는 끝냈었다'],['He had left when I arrived','내가 도착했을 때 그는 떠났었다'],['We had eaten before the movie','영화 전에 우리는 먹었었다'],['She had read the book already','그녀는 이미 그 책을 읽었었다'],['They had gone home','그들은 집에 갔었다'],['I had never seen it before','나는 전에 그것을 본 적이 없었다']],'had+p.p')(n),
+ mcomp:(n)=>fx([['This is much bigger than that','이것은 저것보다 훨씬 크다'],['She is much taller than me','그녀는 나보다 훨씬 키가 크다'],['It is far better than before','전보다 훨씬 낫다'],['This book is much more interesting','이 책이 훨씬 더 재미있다'],['He runs much faster','그는 훨씬 빨리 달린다'],['Today is much colder','오늘이 훨씬 춥다']],'much/far')(n),
  g1:(n)=>{const S=sh(subjS),V=sh(vbS),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],v=V[i%V.length];o.push({en:`${s[0]} ${v[0]}.`,ko:`${s[1]} ${v[1]}`,dr:`${s[0]} ____.`,hint:'동작'});}return o;},
  g2:(n)=>{const S=sh(subjP),O=sh(vo),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],x=O[i%O.length];o.push({en:`${s[0]} ${x[0]} ${x[1]}.`,ko:`${s[1]} ${x[2]} ${x[3]}`,dr:`${s[0]} ${x[0]} ____.`,hint:'대상'});}return o;},
  g3:(n)=>{const S=sh(subjP),A=sh(adj),N=sh(nounObj),o=[];for(let i=0;i<n;i++){const s=S[i%S.length],a=A[i%A.length],nn=N[i%N.length];o.push({en:`${s[0]} have a ${a[0]} ${nn[0]}.`,ko:`${s[1]} ${a[1]} ${nn[1]} 가지고 있어요`,dr:`${s[0]} have a ____ ${nn[0]}.`,hint:'꾸밈말'});}return o;},
@@ -219,13 +378,13 @@ const QNT=[['many','많은'],['a lot of','많은'],['some','약간의'],['a few'
 const PLN=[['books','책'],['apples','사과'],['friends','친구'],['toys','장난감'],['dogs','개'],['flowers','꽃'],['coins','동전'],['birds','새'],['cars','차'],['ideas','생각']];
 const PP=[['eaten','먹다'],['seen','보다'],['done','하다'],['read','읽다'],['finished','끝내다'],['gone','가다'],['made','만들다'],['written','쓰다'],['found','찾다'],['heard','듣다']];
 const GER=[['Swimming','수영','swim'],['Reading','독서','read'],['Running','달리기','run'],['Singing','노래','sing'],['Cooking','요리','cook'],['Playing','놀기','play'],['Drawing','그리기','draw'],['Dancing','춤추기','dance'],['Hiking','등산','hike'],['Writing','글쓰기','write']];
-const SUP=[['biggest','가장 큰','big'],['fastest','가장 빠른','fast'],['tallest','가장 키 큰','tall'],['smallest','가장 작은','small'],['oldest','가장 오래된','old'],['happiest','가장 행복한','happy'],['best','최고의','good'],['highest','가장 높은','high'],['funniest','가장 웃긴','funny'],['kindest','가장 친절한','kind']];
+const SUP=[['biggest','가장 큰','big'],['smallest','가장 작은','small'],['oldest','가장 오래된','old'],['newest','가장 새로운','new'],['longest','가장 긴','long'],['best','최고의','good'],['prettiest','가장 예쁜','pretty']];
 const PART=[['running','달리는','run'],['sleeping','자는','sleep'],['crying','우는','cry'],['broken','부서진','break'],['painted','칠해진','paint'],['singing','노래하는','sing'],['flying','나는','fly'],['closed','닫힌','close'],['smiling','웃는','smile'],['falling','떨어지는','fall']];
 const PCL=[['Walking home','집에 걸어가며'],['Reading a book','책을 읽으며'],['Feeling tired','피곤해서'],['Hearing the news','소식을 듣고'],['Opening the door','문을 열며'],['Smiling brightly','밝게 웃으며'],['Running fast','빨리 달리며'],['Looking up','올려다보며']];
 const PCM=[['I saw a cat','고양이를 봤어요'],['she sat down','그녀는 앉았어요'],['we went out','우리는 나갔어요'],['he smiled','그는 웃었어요'],['I felt happy','행복했어요'],['they cheered','그들은 환호했어요']];
-const PASS=[['is made','만들어져요'],['was built','지어졌어요'],['is loved','사랑받아요'],['was found','발견됐어요'],['is used','사용돼요'],['was written','쓰여졌어요'],['is kept','보관돼요'],['was opened','열렸어요']];
+const PASS=[['is made','만들어져요'],['is used','사용돼요'],['is loved','사랑받아요'],['was found','발견됐어요'],['is kept','보관돼요'],['was opened','열렸어요'],['is cleaned','청소돼요'],['is sold','팔려요']];
 const PASSUBJ=[['The cake','케이크는'],['The house','집은'],['The song','노래는'],['The book','책은'],['The bridge','다리는'],['The door','문은'],['The picture','그림은'],['The toy','장난감은']];
-const RADV=[['the place','장소','where'],['the day','날','when'],['the reason','이유','why'],['the way','방법','how']];
+const RADV=[['the place','장소','where'],['the day','날','when'],['the reason','이유','why']];
 const RADVCL=[['we met','우리가 만난'],['I was born','내가 태어난'],['she left','그녀가 떠난'],['he cried','그가 운'],['we played','우리가 논']];
 const INDQ=[['where she lives','그녀가 어디 사는지'],['what he wants','그가 무엇을 원하는지'],['why they left','그들이 왜 떠났는지'],['how it works','어떻게 되는지'],['who made it','누가 만들었는지'],['when it starts','언제 시작하는지']];
 const SUBJIF=[['had time','시간이 있다면','I would travel','여행할 텐데'],['were rich','부자라면','I would help','도울 텐데'],['knew the answer','답을 안다면','I would tell you','말해줄 텐데'],['could fly','날 수 있다면','I would go home','집에 갈 텐데'],['were you','너라면','I would try again','다시 해볼 텐데']];
@@ -321,9 +480,20 @@ Object.assign(WORDS,{
  subj:['if','would','had','were','could']
 });
 const EASY={
- g1:['누가 + 무엇하다','The dog runs'],
- be:['누가 + 어떠하다','She is happy'],
- g2:['누가 + 무엇을 하다','I like dogs'],
+ agree:['한 명일 때 동사 -s','She runs fast'],
+ prog:['~하는 중 (be+~ing)','The dog is running'],
+ itsubj:['날씨·시간 It','It is rainy'],
+ refl:['나 스스로 (~self)','I did it myself'],
+ svoo:['~에게 ~을 (주다)','I gave him a gift'],
+ perc:['~가 ~하는 것을 (보다/시키다)','I saw him run'],
+ may:['may (~일지도)','It may rain'],
+ should:['should (~하는 게 좋다)','You should rest'],
+ haveto:['have to (~해야 한다)','I have to go'],
+ pastperf:['과거완료 (had+p.p)','I had finished'],
+ mcomp:['훨씬 더 ~한 (much/far)','much bigger than'],
+ g1:['주인공 + 동작','The dog runs'],
+ be:['주인공 + 상태','She is happy'],
+ g2:['주인공 + 동작 + 대상','I like dogs'],
  g3:['꾸미는 말 넣기','a big dog'],
  g4:['어디서·언제 넣기','runs in the park'],
  adv:['어떻게(부사)','runs fast'],
@@ -361,7 +531,7 @@ const CARDS={
 };
 const MW={s1:'MW 1권 (1.1·1.2)',s2:'MW 2권 (2.1·2.2)',s3:'MW 3권 (3.1·3.2)',s4:'MW 4권 (4.1·4.2)',s5:'MW 5권 (5.1·5.2)',s6:'MW 6권 (6.1·6.2)',s7:'MW 7권 (7.1·7.2)',s8:'MW 8권 (8.1)',s9:'EPL 통합',s10:'EPL 비판적 글쓰기'};
 const FRAMES={
- sprout:{name:'Sprout · 단어로 문장 만들기',open:'There is',r1:'I see',r2:'I like',lines:4},
+ sprout:{name:'Sprout · 책 소개하고 내 생각 쓰기',copy:['The title of the book is','The author is'],open:'This book is about',r1:'My favorite part is',r2:null,lines:5},
  explorer:{name:'Explorer · 이야기 다시 쓰기',open:'First,',r1:'Then,',r2:'Finally,',lines:5},
  storyteller:{name:'Storyteller · 설명하는 북리뷰',open:'This story is about',r1:'It is important because',r2:'This part shows that',lines:9},
  thinker:{name:'Thinker · 분석하고 판단하기',open:'I think the author wants to show',r1:'One reason is',r2:'Another reason is',lines:11},
@@ -374,7 +544,24 @@ const findStage=id=>STAGES.find(s=>s.id===id);
 
 function fzLines(n){let s='';for(let i=0;i<n;i++)s+='<div class="fl"></div>';return s;}
 const LOGO=`<div class="logo"><b>EPL</b>원서읽는 아이들 영어학원</div>`;
-const FB=`<div class="fb"><div class="checks"><span>구조</span><span>때</span><span>철자</span><span>논리 흐름</span></div><div class="stamp">선생님<br>도장</div></div>`;
+const RUBRIC_BY={
+  sprout:[['Structure','문장 구조'],['Words','단어'],['Spelling','철자'],['Complete','완성도']],
+  explorer:[['Structure','문장 구조'],['Tense','시제'],['Spelling','철자'],['Flow','흐름']],
+  storyteller:[['Expression','구조·표현'],['Linking','연결'],['Spelling','철자'],['Logic','논리']],
+  thinker:[['Pattern','문장 형식'],['Reason','근거'],['Accuracy','정확성'],['Logic','논리']],
+  creator:[['Claim','주장·논증'],['Evidence','근거'],['Accuracy','정확성'],['Structure','구성']]
+};
+const scaleCells=`<span class="lvl p">P</span><span class="lvl d">D</span><span class="lvl b">B</span>`;
+function fbBox(fkey){
+  const R=RUBRIC_BY[fkey]||RUBRIC_BY.sprout;
+  return `<div class="fb">
+  <div class="fbgrid">
+    <div class="fbhead"><span class="fbc">Teacher Feedback</span><span class="fbkey">P 능숙 · D 발전 · B 시작 <i>(하나에 ○)</i></span></div>
+    ${R.map(r=>`<div class="fbrow"><span class="fbcrit">${r[0]} <em>${r[1]}</em></span><span class="fbscale">${scaleCells}</span></div>`).join('')}
+  </div>
+  <div class="stamp">선생님<br>확인</div>
+</div>`;
+}
 
 function spiralPlan(st, want){
   const g=st.gens, plan=[];
@@ -407,15 +594,36 @@ const ENST={
  s9:{n:'Integrated Writing',s:'Combining Learned Structures'},
  s10:{n:'Critical Writing',s:'Claim · Evidence · Counter · Conclusion'}
 };
+const COVER={
+ s1:{acc:'#33502e',sub:'#a9c6a0',note:'Sprout',sym:'<svg viewBox="0 0 64 64"><path d="M32 54V32"/><path d="M32 34C22 34 16 28 16 20C26 20 32 26 32 34Z"/><path d="M32 30C42 30 48 24 48 16C38 16 32 22 32 30Z"/><path d="M23 54H41"/></svg>'},
+ s2:{acc:'#4a5320',sub:'#c4cd93',note:'Sprout',sym:'<svg viewBox="0 0 64 64"><path d="M18 46C18 26 34 14 48 14C48 34 34 46 18 46Z"/><path d="M23 41L44 20"/></svg>'},
+ s3:{acc:'#2b4b66',sub:'#9db9d1',note:'Explorer',sym:'<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="19"/><path d="M32 20L38 38L32 34L26 38Z"/></svg>'},
+ s4:{acc:'#1f4d49',sub:'#8fc2bd',note:'Explorer',sym:'<svg viewBox="0 0 64 64"><path d="M32 50C24 40 20 33 20 26A12 12 0 1 1 44 26C44 33 40 40 32 50Z"/><circle cx="32" cy="26" r="5"/></svg>'},
+ s5:{acc:'#8a3d22',sub:'#e0a389',note:'Storyteller',sym:'<svg viewBox="0 0 64 64"><path d="M32 18C26 14 16 14 12 16V46C16 44 26 44 32 48C38 44 48 44 52 46V16C48 14 38 14 32 18Z"/><path d="M32 18V48"/></svg>'},
+ s6:{acc:'#7a5410',sub:'#e0be83',note:'Storyteller',sym:'<svg viewBox="0 0 64 64"><path d="M24 16L40 32L34 46L18 30Z"/><path d="M40 32L48 40"/></svg>'},
+ s7:{acc:'#4f2f52',sub:'#c39ec6',note:'Thinker',sym:'<svg viewBox="0 0 64 64"><path d="M42 24A11 11 0 1 0 40 41A7 7 0 1 0 33 33A4 4 0 1 0 36 30"/></svg>'},
+ s8:{acc:'#33285c',sub:'#a99cd1',note:'Thinker',sym:'<svg viewBox="0 0 64 64"><path d="M32 14V46"/><path d="M18 24H46"/><path d="M18 24L12 36A6 6 0 0 0 24 36Z"/><path d="M46 24L40 36A6 6 0 0 0 52 36Z"/><path d="M24 48H40"/></svg>'},
+ s9:{acc:'#8a6a1a',sub:'#e6c884',note:'Creator',sym:'<svg viewBox="0 0 64 64"><path d="M32 12A14 14 0 0 1 40 38H24A14 14 0 0 1 32 12Z"/><path d="M26 44H38"/><path d="M28 50H36"/></svg>'},
+ s10:{acc:'#1e2b4a',sub:'#a5b4d1',note:'Creator',sym:'<svg viewBox="0 0 64 64"><path d="M32 12L38 26L53 27L41 37L45 52L32 43L19 52L23 37L11 27L26 26Z"/></svg>'}
+};
 function cover(st){
   const e=ENST[st.id]||{n:st.nm,s:st.sub};
-  return `<div class="sheet cover">
-    <div class="cv-brand">EPL · Empower · Practice · Literacy</div>
-    <div class="cv-title">EPL Writing Builder</div>
-    <div class="cv-sub">Thinking-Based English · Reading Words → Sentence Structure → Logical Thinking → Writing</div>
-    <div class="cv-stage">Level ${st.id.slice(1)} · ${e.n}</div>
-    <div class="cv-struct">${e.s}</div>
-    <div class="cv-meta">Name ____________   ·   Date ____________</div>
+  const c=COVER[st.id]||{acc:'#333',sub:'#ccc',note:'EPL',sym:''};
+  const lv=st.id.slice(1);
+  return `<div class="sheet cover deep" style="--acc:${c.acc};--sub:${c.sub}">
+    <div class="cv-top">
+      <div class="cv-brandmark">EPL</div>
+      <div class="cv-brandsub">EMPOWER · PRACTICE · LITERACY</div>
+    </div>
+    <div class="cv-block">
+      <div class="cv-badge">LEVEL ${lv} · ${c.note.toUpperCase()}</div>
+      <div class="cv-lvtitle">${e.n}</div>
+      <div class="cv-struct">${e.s}</div>
+      <div class="cv-rule"></div>
+      <div class="cv-loop">Reading Words → Sentence Structure → Logical Thinking → Writing</div>
+      <div class="cv-prod">EPL Writing Builder</div>
+      <div class="cv-meta">Name ____________   ·   Date ____________</div>
+    </div>
   </div>`;
 }
 function curriculum(st,plan){
@@ -452,12 +660,12 @@ function unit(st,u){
   const bwSlots=Array.from({length:10}).map((_,i)=>`<div class="bw"><span class="bwn">${i+1}</span></div>`).join('');
   const readbox=`<div class="readbox"><div class="bwh">📖 오늘 읽은 책에서 나온 단어 10개 <span>읽으면서 만난 단어를 적고, 그 단어로 아래 문장을 만들어요</span></div><div class="bwgrid">${bwSlots}</div></div>`;
   const thinkRows=(THINK[THINKKEY[st.id]]||THINK.whodidwhat).map(t=>`<div class="row"><div class="q">${t[0]}<small>${t[1]}</small></div><div class="l"></div></div>`).join('');
-  const mk=Array.from({length:9}).map((_,i)=>`<div class="mk"><span class="mn">${i+1}</span><div class="ml"></div></div>`).join('');
+  const mk=Array.from({length:10}).map((_,i)=>`<div class="mk"><span class="mn">${i+1}</span><div class="ml"></div></div>`).join('');
 
   const pageA=`<div class="sheet">
     <div class="top"><div class="bk">${st.stage} · ${st.nm}</div><div class="no">Unit ${u.n} · ${newTag}</div></div>
     ${readbox}
-    <div class="struct"><div class="nm">${focusName}</div><div class="sub">${focusEx}　·　예) ${model.en} (${model.ko})</div></div>
+    <div class="struct"><div class="nm">${focusName}</div><div class="sub">${focus ? `${focusEx}　·　예) ${model.en} (${model.ko})` : '배운 구조(아래 ☐)를 두 개 이상 섞어 문장을 만들어요'}</div></div>
     ${cards?`<div class="cards">${cards}</div>`:''}
     <div class="block-h">구조 연습 <span>위에 적은 책 단어로 「${focusName}」 문장을 만들어요</span></div>
     <div class="makelist">${mk}</div>
@@ -466,7 +674,7 @@ function unit(st,u){
 
   const adv = u.integrate && lvl>=9;
   if(!adv){
-    const metaRow=`<div class="sf-meta"><span>제목 Title</span><u></u><span>작가 Author</span><u></u></div>`;
+    const metaRow=`<div class="sf-meta2"><div class="mrow"><span>제목 Title</span><u></u></div><div class="mrow"><span>작가 Author</span><u></u></div></div>`;
     if(lvl<=4){
       const pageB=`<div class="sheet">
         <div class="top"><div class="bk">${st.nm}</div><div class="no">Unit ${u.n} · Write</div></div>
@@ -475,11 +683,12 @@ function unit(st,u){
         <div class="block-h">My Writing <span>${FR.name}</span></div>
         ${metaRow}
         ${useStruct}
+        ${FR.copy?FR.copy.map(c=>`<div class="sl copy"><span class="st">${c}</span><span class="sline"></span></div>`).join(''):''}
         <div class="sl"><span class="st">${FR.open}</span><span class="sline"></span></div>
         <div class="fillzone">${fzLines(FR.lines)}</div>
-        <div class="sl"><span class="st">${FR.r1}</span><span class="sline"></span></div>
-        <div class="sl"><span class="st">${FR.r2}</span><span class="sline"></span></div>
-        ${FB}${LOGO}
+        ${FR.r1?`<div class="sl"><span class="st">${FR.r1}</span><span class="sline"></span></div>`:''}
+        ${FR.r2?`<div class="sl"><span class="st">${FR.r2}</span><span class="sline"></span></div>`:''}
+        ${fbBox(FRAMEKEY[st.id]||'sprout')}${LOGO}
       </div>`;
       return pageA+pageB;
     }
@@ -497,7 +706,7 @@ function unit(st,u){
       <div class="fillzone">${fzLines(14)}</div>
       <div class="sl"><span class="st">${FR.r1}</span><span class="sline"></span></div>
       <div class="sl"><span class="st">${FR.r2}</span><span class="sline"></span></div>
-      ${FB}${LOGO}
+      ${fbBox(FRAMEKEY[st.id]||'sprout')}${LOGO}
     </div>`;
     return pageA+thinkPage+writePage;
   }
@@ -516,7 +725,7 @@ function unit(st,u){
     ${useStruct}
     <div class="sl"><span class="st">I think this book is</span><span class="sline"></span></div>
     ${secHTML}
-    ${FB}${LOGO}
+    ${fbBox(FRAMEKEY[st.id]||'sprout')}${LOGO}
   </div>`;
   return pageA+pageB+pageC;
 }
@@ -532,6 +741,225 @@ function generate(){
 }
 generate();
 
+</script>
+<script>
+(function(){
+
+const NOTE={1:'Sprout',2:'Sprout',3:'Explorer',4:'Explorer',5:'Storyteller',6:'Storyteller',7:'Thinker',8:'Thinker',9:'Creator',10:'Creator'};
+const LNAME={1:'Basic Sentences',2:'Modifiers & Past',3:'Negatives & Questions',4:'Future & Modals',5:'Comparison & Quantity',6:'To-inf, Gerund & Linking',7:'Sentence Patterns & Perfect',8:'Passive & Relatives',9:'Integrated Writing',10:'Critical Writing'};
+
+// 문항 은행: 레벨별 4섹션
+const TESTS={
+1:{model:['The dog runs.','I like apples.','She is happy.'],
+   copy:[['(rabbit)','같은 구조로: 토끼로 문장 만들기'],['(birds)','같은 구조로: 새(복수)로'],['(the cat / small)','be동사로 상태 문장']],
+   build:[['cat · jump','주어+동사'],['I · read · books','주어+동사+목적어'],['boy · tall','주어+be+상태'],['birds · sing','주어+동사(복수)'],['we · like · apples','주어+동사+목적어'],['she · happy','주어+be+상태'],['she · like · music','3인칭 단수 -s'],['he · read · books','3인칭 단수 -s']],
+   expand:[['A dog runs.','동사·꾸밈 더하기'],['I see a bird.','대상·장소 더하기'],['She is kind.','이유·상황 더하기']],
+   pas:'A cat sees a bird. The cat runs fast.',org:['Who','Did','What'],orgc:'c3',
+   w:'Write 3 sentences about your favorite animal.',wst:['There is','I see','I like'],
+   dx:'기본 문장(주인공·동작·대상·상태) + 3인칭 단수(-s) 수일치'},
+2:{model:['She sings beautifully.','The dog is running.','I played soccer yesterday.'],
+   copy:[['(dance / happily)','부사 넣어 같은 구조로'],['(read / yesterday)','과거형으로'],['(a big dog)','형용사 넣어 꾸미기'],['(run / now)','진행형으로 (be+~ing)']],
+   build:[['boy · run · fast','부사'],['I · watch · a movie · yesterday','과거형'],['a · beautiful · flower','형용사 꾸밈'],['the boy · run · now','진행형 be+~ing'],['it · rainy · today','비인칭 it']],
+   expand:[['I played.','언제·무엇을 더하기'],['A cat sleeps.','형용사·부사 더하기'],['She ran.','장소·이유 더하기']],
+   pas:'Yesterday, Sam found an old key. He opened a small box.',org:['Who','Did','What'],orgc:'c3',
+   w:'Write about something you did yesterday. (4 sentences)',wst:['First,','Then,','Finally,'],
+   dx:'수식어(꾸미는 말) · 과거 시제 · 진행형(be+~ing) · 비인칭 it'},
+3:{model:['I do not like it.','Do you have a pen?','Where do you live?'],
+   copy:[['(not / read)','같은 구조 부정문으로'],['(you / like / books)','같은 구조 의문문으로'],['(where / go)','같은 구조 의문사 문장으로']],
+   build:[['I · not · eat · fish','아니라고 말하기'],['ask: he · have · a dog','물어보기'],['ask: she · where · live','의문사로 묻기'],['I · make · it · myself','재귀대명사 ~self']],
+   expand:[['I like it.','아니라고 바꿔 길게'],['You have a pen.','물어보는 문장으로'],['She lives here.','언제·왜 묻는 문장으로']],
+   pas:'Last week, Mia went to the zoo with her mom. She saw a lion.',org:['Who / When','Where','What happened'],orgc:'c3',
+   w:'Retell a story you read. Use First, Then, Finally.',wst:['First,','Then,','Finally,'],
+   dx:'부정·의문·의문사 문장 + 재귀대명사(~self)'},
+4:{model:['I will help you tomorrow.','You should rest.','You must wear a helmet.'],
+   copy:[['(will / study)','같은 구조 미래로'],['(can / speak French)','같은 구조 능력으로'],['(must / be quiet)','같은 구조 의무로'],['(should / rest)','should로'],['(have to / go)','have to로']],
+   build:[['I · help · tomorrow','앞으로 할 일'],['she · swim · well','할 수 있는 것'],['you · wear · helmet','해야 하는 것'],['it · rain · today','조동사 may(~일지도)'],['you · rest','조동사 should'],['I · go · now','have to(~해야 한다)']],
+   expand:[['I will go.','언제·어디로 더하기'],['She can sing.','무엇을·얼마나 더하기'],['You must sleep.','왜·언제 더하기']],
+   pas:'A boy lost his dog. He looked everywhere. Finally, he found it at home.',org:['Beginning','Middle','End'],orgc:'c3',
+   w:'Retell your story with a Beginning, Middle, and End.',wst:['At first,','Then,','In the end,'],
+   dx:'미래·조동사(can·must·may·should·have to) 문장과 이야기 재구성'},
+5:{model:['A lion is stronger than a cat.','This is the biggest house.','He is as tall as me.'],
+   copy:[['(fast / car / bike)','비교급으로'],['(big / house)','최상급으로'],['(tall / as~as)','원급 비교로']],
+   build:[['lion · strong · cat','둘을 비교'],['this · big · house','가장 ~한 것'],['he · tall · me','~만큼 ~한'],['this · much · big · that','비교급 강조 much/far']],
+   expand:[['A lion is strong.','비교 대상 더하기'],['This house is big.','최상급으로 확장'],['She is smart.','비교하며 확장'],['This is big.','much/far로 비교 강조하기']],
+   pas:'In a quiet village, a brave girl named Lena helped her neighbors. She was kinder than anyone.',org:['Setting','Characters','Plot'],orgc:'c3',
+   w:'Write a book review. What is it about? Why is it important?',wst:['This story is about','It is important because','This part shows that'],
+   dx:'비교급·최상급·원급 + 비교급 강조(much/far)'},
+6:{model:['I want to go home.','Swimming is fun.','It rained, so we stayed home.'],
+   copy:[['(want / to learn)','to부정사로'],['(reading / fun)','동명사로'],['(rain / so)','접속사로 잇기']],
+   build:[['I · want · to · win','~하고 싶다'],['reading · fun','~하는 것은'],['tired · so · rest','이유-결과 잇기']],
+   expand:[['I want to go.','목적·이유 더하기'],['I like reading.','무엇을·언제 더하기'],['I ran.','접속사로 두 문장 잇기']],
+   pas:'It rained all night, so the river rose. Because the bridge broke, the town was cut off.',org:['Cause','Effect','So…'],orgc:'c3',
+   w:'Explain cause and effect from your book in one paragraph.',wst:['This happens because','As a result,','So,'],
+   dx:'to부정사·동명사·접속사로 문장 연결'},
+7:{model:['It makes me happy.','I gave him a book.','I saw him run.'],
+   copy:[['(make / me / sad)','5형식으로'],['(think / that ~)','that절로'],['(have / seen)','현재완료로'],['(give / him / book)','4형식으로 (~에게 ~을)'],['(see / him / run)','지각동사로']],
+   build:[['book · make · me · smile','~를 ~하게 만들다'],['I · think · she · honest','~라고 생각하다'],['I · finish · homework · already','현재완료'],['I · give · her · gift','4형식 ~에게 ~을'],['she · let · me · go','사역동사(let)']],
+   expand:[['I read a book.','완료·경험으로 확장'],['She is kind.','that절로 의견 더하기'],['It is fun.','이유·근거 더하기']],
+   pas:'Many people think dogs are the best pets. Dogs are loyal. However, some say cats are easier.',org:['Fact','Opinion','My reason'],orgc:'c3',
+   w:'What does the author want to show? Give one reason.',wst:['I think the author wants to show','One reason is','Another reason is'],
+   dx:'문장 형식(4·5형식·that절)·지각/사역동사·현재완료, 사실·의견 구분'},
+8:{model:['The house was built by them.','This is the boy who won.','The book which is red is mine.'],
+   copy:[['(cake / make)','수동태로'],['(boy / who)','관계대명사 who로'],['(book / which)','관계대명사 which로']],
+   build:[['the song · love · by all','수동태'],['boy · who · run · fast','who로 꾸미기'],['book · which · red','which로 꾸미기']],
+   expand:[['They built it.','수동태로 바꿔 확장'],['This is a boy.','who로 꾸며 확장'],['I read a book.','which로 꾸며 확장']],
+   pas:'The town had a big problem: the water was dirty. Engineers built a new filter. As a result, it became clean.',org:['Problem','Solution','Result'],orgc:'c3',
+   w:'Write a problem-solution analysis of your book.',wst:['The problem is','The solution is','As a result,'],
+   dx:'수동태·관계사로 문장 확장, 문제-해결 구조'},
+9:{model:['The main idea is that reading helps us grow.','I think that I have learned a lot.','This is the best book I have read.'],
+   copy:[['(main idea / that ~)','종합 문장으로'],['(비교+관계사)','두 구조 합쳐서'],['(완료+that)','두 구조 합쳐서']],
+   build:[['I · believe · reading · important','주장 문장'],['book · which · change · me','관계사+수동'],['this · good · book · read','최상급+완료'],['I · finish · before · she · come','과거완료 had p.p']],
+   expand:[['Reading is good.','근거 더해 확장'],['I like this book.','이유·비교 더하기'],['It is important.','종합 문장으로'],['She came. I left.','시제 순서 맞춰 한 문장으로(과거완료)']],
+   pas:'Reading every day changes your brain. It builds focus, grows vocabulary, and improves writing.',org:['Main Idea','Key details','Why it matters'],orgc:'c3',
+   w:'Write an essay: What is the main idea, and do you agree?',wst:['The main idea is','The author wants to show','I believe'],
+   dx:'배운 구조 통합 + 과거완료(had p.p)·시제일치, 중심 생각 파악'},
+10:{model:['If I were rich, I would help others.','The author claims that technology harms creativity.','However, some studies show the opposite.'],
+   copy:[['(if / were / would)','가정법으로'],['(author / claims / that)','주장 문장으로'],['(however / ~)','반론으로']],
+   build:[['if · I · time · travel','가정법'],['author · argue · that ~','주장 제시'],['however · disagree','반론 제시']],
+   expand:[['I would help.','조건 더해 가정법으로'],['The author is right.','근거 더해 확장'],['I disagree.','반론·근거로 확장']],
+   pas:'The author argues that technology makes children less creative. Still, some studies show the opposite.',org:['Author’s Purpose','Evidence','My critique'],orgc:'c3',
+   w:'Write a critical essay: Claim - Evidence - Counter - Conclusion.',wst:['I believe','The evidence is','On the other hand,'],
+   dx:'가정법·비판적 논증 구조(주장-근거-반론)'},
+};
+
+// 배치고사(레벨 진입 진단): 레벨당 대표 1문항
+
+const FOOT='<div class="foot2">EPL Writing Builder · Assessment</div><div class="foot"><b>EPL</b></div>';
+
+function items(list){return '<div class="items">'+list.map((q,i)=>{const s=Array.isArray(q)?q[0]:q;return `<div class="it"><span class="n">${i+1}</span>${s}<div class="ans"></div></div>`;}).join('')+'</div>';}
+function keyTable(list,tag){let r='';list.forEach((q,i)=>{const dx=Array.isArray(q)?q[1]:'-';r+=`<tr><td style="width:34px;">${tag}${i+1}</td><td>${dx}</td></tr>`;});return r;}
+
+function promo(lv){
+  const T=TESTS[lv], note=NOTE[lv], nm=LNAME[lv];
+  const head=(no)=>`<div class="top"><div class="bk">Level ${lv} · ${nm}</div><div class="no">PROMOTION · ${note.toUpperCase()} · ${no}</div></div>`;
+  const tasks=(list)=>'<div class="items">'+list.map((q,i)=>{const c=Array.isArray(q)?q[0]:q;return `<div class="it"><span class="n">${i+1}</span>${c}<div class="ans"></div></div>`;}).join('')+'</div>';
+  const expandTasks=(list)=>'<div class="items">'+list.map((q,i)=>`<div class="it"><span class="n">${i+1}</span>${q[0]}  <span class="ecue">→ ${q[1]}</span><div class="ans"></div></div>`).join('')+'</div>';
+  const keyRows=(list,tag)=>list.map((q,i)=>`<tr><td style="width:40px;">${tag}${i+1}</td><td>${Array.isArray(q)?q[1]:'-'}</td></tr>`).join('');
+  let h='';
+  // P1 Read & Copy
+  h+=`<div class="sheet">${head('SECTION 1 / 5 · READ &amp; COPY')}<h2>Section 1 · 예문 읽고 같은 구조로 쓰기</h2>
+     <p class="lead">아래 예문을 읽고, <b>같은 구조로</b> 괄호 속 말을 넣어 문장을 만드세요.</p>
+     <div class="meta">Name <u></u> Date <u></u> 교사 <u></u></div>
+     <div class="modelbox">${T.model.map(m=>`<span>${m}</span>`).join('')}</div>
+     ${tasks(T.copy)}${FOOT}</div>`;
+  // P2 Build & Expand
+  if(lv===1){
+    h+=`<div class="sheet">${head('SECTION 2 / 5 · BUILD')}<h2>Section 2 · 단어로 문장 만들기</h2>
+     <p class="lead">주어진 단어로 문장을 만드세요. (6문항)</p>${tasks(T.build)}${FOOT}</div>`;
+  } else {
+    h+=`<div class="sheet">${head('SECTION 2 / 5 · BUILD &amp; EXPAND')}<h2>Section 2 · 문장 만들고 확장하기</h2>
+     <p class="lead">A. 주어진 단어로 문장을 만드세요. &nbsp; B. 짧은 문장을 더 길고 자세하게 늘려 쓰세요.</p>
+     <div class="subh">A · Build (단어로 문장 만들기)</div>${tasks(T.build)}
+     <div class="subh">B · Expand (문장 늘려쓰기)</div><p class="ehint">꼬뮸는 말·어디서·언제·왜를 더해 더 길고 자세하게 쓰세요. 예) <i>A dog runs.</i> → <i>A big dog runs fast in the park.</i></p>${expandTasks(T.expand)}${FOOT}</div>`;
+  }
+  // P3 Organizer
+  const cells=T.org.map(l=>`<div class="ocell"><div class="lab">${l}</div><div class="fill"><div class="fl"></div><div class="fl"></div><div class="fl"></div><div class="fl"></div></div></div>`).join('');
+  h+=`<div class="sheet">${head('SECTION 3 / 5 · THINK')}<h2>Section 3 · Logical Organizer</h2><p class="lead">아래 글을 읽고 조직자를 채우세요.</p><div class="passage">${T.pas}</div><div class="org ${T.orgc}">${cells}</div>${FOOT}</div>`;
+  // P4 Writing
+  const st=T.wst.map(x=>`<div class="it"><span class="starter">${x}</span><div class="ans"></div></div>`).join('');
+  let wl='';for(let i=0;i<9;i++)wl+='<div class="wl"></div>';
+  h+=`<div class="sheet">${head('SECTION 4 / 5 · WRITE')}<h2>Section 4 · Writing Task</h2><p class="lead">${T.w}</p><div class="sf-meta"><span>제목 Title</span><u></u><span>작가 Author</span><u></u></div>${(function(){const starters=T.wst.map(s=>`<div class="wrow"><span class="starter">${s}</span><div class="wl2"></div></div>`).join('');const extra=lv<=2?2:(lv<=4?4:(lv<=6?6:8));let body='';for(let i=0;i<extra;i++)body+='<div class="wl2"></div>';return `<div class="wzone wfw">${starters}${body}</div>`;})()}${FOOT}</div>`;
+  // P5 Teacher Key (진단 포인트) + Rubric
+  h+=`<div class="sheet">${head('ANSWER KEY · 교사용')}<h2>진단표 &amp; Promotion Decision</h2>
+     <p class="lead">이 레벨 진단 목표: <b>${T.dx}</b>. 아래는 문항별 진단 포인트(학생용에는 미노출).</p>
+     <div class="keycols"><table><tr><th colspan="2">S1 · Copy</th></tr>${keyRows(T.copy,'S1-')}</table><table><tr><th colspan="2">S2A · Build</th></tr>${keyRows(T.build,'S2A-')}</table><table><tr><th colspan="2">S2B · Expand</th></tr>${keyRows(T.expand,'S2B-')}</table></div>
+     <div class="box" style="margin-top:10px;"><b>루브릭 채점 (문장 과업 9개 · 구조 정확도 위주)</b>
+     <table style="margin-top:6px;"><tr><td>구조를 정확히 사용한 문장 수</td><td style="width:110px;">___ / 9</td></tr>
+     <tr><td>Organizer 완성</td><td>완성 ☐ / 미완 ☐</td></tr>
+     <tr><td>Writing 루브릭 (구조·정확성·완성도)</td><td>___ / 3</td></tr></table></div>
+     <div class="crit"><b>승급 판정:</b> 구조 정확 문장 <b>7개 이상(9개 중)</b> · Organizer 완성 · Writing 루브릭 <b>2/3 이상</b> → <b>Level ${lv+1===11?'수료':lv+1} 승급</b>. 미달 시 <b>2주 재이수 후 재응시</b>.</div>
+     <div class="sign">최종 판정: 승급 ☐ &nbsp; 보류 ☐ &nbsp;&nbsp; 교사 <u></u></div>${FOOT}</div>`;
+  return h;
+}
+const PLDIAG=[
+ ['개가 뛴다.','기본 문장 SV'],
+ ['나는 어제 축구를 했다.','과거 시제'],
+ ['너는 책을 좋아하니?','의문문'],
+ ['나는 내일 너를 도와줄 것이다.','미래 will'],
+ ['사자는 고양이보다 힘이 세다.','비교급'],
+ ['비가 와서 우리는 집에 있었다.','접속사 so'],
+ ['나는 그것을 전에 본 적이 있다.','현재완료'],
+ ['그 집은 그들에 의해 지어졌다.','수동태'],
+ ['이것은 내가 읽은 가장 좋은 책이다.','관계사·최상급'],
+ ['내가 부자라면, 남을 도울 텐데.','가정법'],
+];
+function placement(){
+  const head=(no)=>`<div class="top"><div class="bk">Placement Test</div><div class="no">NEW STUDENT · ${no}</div></div>`;
+  let h='';
+  // P1 Read & Copy Diagnostic (레벨별 1문항, 오름차순)
+  let s1='<div class="items">';
+  for(let lv=1;lv<=10;lv++){const P=PLDIAG[lv-1];s1+=`<div class="it"><span class="n">L${lv}</span>한글을 영어로 쓰세요: <b>${P[0]}</b> &nbsp;→ <span class="bl" style="min-width:220px;"></span><div class="ans"></div></div>`;}
+  s1+='</div>';
+  h+=`<div class="sheet">${head('SECTION 1 / 5 · READ &amp; COPY')}<h2>배치고사 · 문장 영작 진단</h2>
+     <p class="lead">한글 뜻을 보고 영어 문장으로 쓰세요. 예시는 없습니다. 모르면 비워 두고 넘어갑니다. 연속해서 성공한 <b>가장 높은 레벨</b>이 진입선입니다.</p>
+     <div class="meta">Name <u></u> Date <u></u> 교사 <u></u></div>${s1}${FOOT}</div>`;
+  // P2 Build & Expand Diagnostic
+  let s2='<div class="subh">A · Build (단어로 문장 만들기)</div><div class="items">';
+  [1,3,5,7,9].forEach((lv,i)=>{s2+=`<div class="it"><span class="n">${i+1}</span>${TESTS[lv].build[0][0]}<div class="ans"></div></div>`;});
+  s2+='</div><div class="subh">B · Expand (문장 늘려쓰기)</div><div class="items">';
+  [2,4,6,8,10].forEach((lv,i)=>{s2+=`<div class="it"><span class="n">${i+1}</span>${TESTS[lv].expand[0][0]}<div class="ans"></div></div>`;});
+  s2+='</div>';
+  h+=`<div class="sheet">${head('SECTION 2 / 5 · BUILD &amp; EXPAND')}<h2>배치고사 · 문장 생산·확장</h2>
+     <p class="lead">A. 주어진 단어로 문장을 만드세요. &nbsp; B. 문장을 더 길고 자세하게 늘려 쓰세요.</p>${s2}${FOOT}</div>`;
+  // P3 Organizer (중간 난이도 지문)
+  const cells=['Who / What','Where','What happened / Why'].map(l=>`<div class="ocell"><div class="lab">${l}</div><div class="fill"><div class="fl"></div><div class="fl"></div><div class="fl"></div><div class="fl"></div></div></div>`).join('');
+  h+=`<div class="sheet">${head('SECTION 3 / 5 · THINK')}<h2>배치고사 · Logical Organizer</h2><p class="lead">글을 읽고 조직자를 채우세요. 사고력 수준(Sprout~Creator)을 진단합니다.</p><div class="passage">A boy read a book about the sea. He learned that the ocean is deep and full of life. He felt curious and wanted to explore more.</div><div class="org c3">${cells}</div>${FOOT}</div>`;
+  // P4 Writing Sample
+  let wl='';for(let i=0;i<9;i++)wl+='<div class="wl"></div>';
+  h+=`<div class="sheet">${head('SECTION 4 / 5 · WRITE')}<h2>배치고사 · Writing Sample</h2><p class="lead">배치 레벨에 맞는 프롬프트 1개를 골라 쓰게 하세요. 글쓰기 산출물로 레벨을 확정합니다.</p>
+     <div class="box"><b>Writing Prompt (택1)</b>
+     <div class="it" style="margin-top:6px;"><span class="lv">L1–2</span> Write 3 sentences about your favorite book.</div>
+     <div class="it"><span class="lv">L3–4</span> Retell a story. Use First, Then, Finally.</div>
+     <div class="it"><span class="lv">L5–6</span> What is your book about? Why is it important?</div>
+     <div class="it"><span class="lv">L7–8</span> What does the author want to show? Give one reason.</div>
+     <div class="it"><span class="lv">L9–10</span> What is the main idea, and do you agree?</div></div>
+     <div class="sf-meta"><span>제목 Title</span><u></u><span>작가 Author</span><u></u></div>
+     <div class="wfw" style="margin-top:10px;">${(function(){let x='';for(let i=0;i<8;i++)x+='<div class="wlw"></div>';return x;})()}</div>${FOOT}</div>`;
+  // P5 Teacher Key + Placement decision
+  let dxr='';for(let lv=1;lv<=10;lv++){dxr+=`<tr><td style="width:40px;">L${lv}</td><td>${TESTS[lv].dx}</td></tr>`;}
+  h+=`<div class="sheet">${head('ANSWER KEY · 교사용')}<h2>진단표 &amp; Placement Key</h2>
+     <p class="lead">각 레벨이 진단하는 구조(학생용에는 미노출). 세 진단(모방·생산·확장)과 글쓰기를 종합합니다.</p>
+     <table><tr><th>Lv</th><th>진단 구조</th></tr>${dxr}</table>
+     <table style="margin-top:10px;"><tr><th>구조 연속정답</th><th>Writing 산출물</th><th>최종 배치</th></tr>
+     <tr><td>L1–2</td><td>3문장</td><td class="lv">Level 1–2 · Sprout</td></tr>
+     <tr><td>L3–4</td><td>First/Then/Finally</td><td class="lv">Level 3–4 · Explorer</td></tr>
+     <tr><td>L5–6</td><td>이유 포함 문단</td><td class="lv">Level 5–6 · Storyteller</td></tr>
+     <tr><td>L7–8</td><td>의견+근거</td><td class="lv">Level 7–8 · Thinker</td></tr>
+     <tr><td>L9–10</td><td>주장+근거</td><td class="lv">Level 9–10 · Creator</td></tr></table>
+     <div class="crit"><b>판정 원칙:</b> 구조·글쓰기 중 <b>가장 낮은 영역</b>을 진입 레벨로 한다(과대 배치 방지). 경계선은 낮은 레벨 시작 후 2주 내 재평가.</div>
+     <div class="sign">최종 배치 레벨: <u></u> &nbsp;&nbsp; 교사 <u></u></div>${FOOT}</div>`;
+  return h;
+}
+
+function run(){
+  const t=document.getElementById('type').value;
+  let html, label;
+  if(t==='place'){html=placement(); label='배치고사 · 2장';}
+  else{const lv=parseInt(t.slice(1),10); html=promo(lv); label=`Level ${lv} 승급테스트 · 5장`;}
+  document.getElementById('asOut').innerHTML=html;
+  document.getElementById('asStatus').textContent=label+' 생성 완료';
+  const f=document.querySelector('#asmt-view .sheet'); if(f) window.scrollTo({top:f.offsetTop-70,behavior:'smooth'});
+}
+
+document.getElementById('asRunBtn').addEventListener('click',run);
+document.getElementById('asPrintBtn').addEventListener('click',function(){window.print();});
+run();
+
+})();
+</script>
+<script>
+(function(){
+  var wb=document.getElementById('wbld-view'), as=document.getElementById('asmt-view');
+  var bWb=document.getElementById('mbWb'), bAs=document.getElementById('mbAs');
+  function show(which){
+    var wbOn=(which==='wb');
+    wb.classList.toggle('active',wbOn); as.classList.toggle('active',!wbOn);
+    bWb.classList.toggle('active',wbOn); bAs.classList.toggle('active',!wbOn);
+    window.scrollTo({top:0});
+  }
+  bWb.addEventListener('click',function(){show('wb');});
+  bAs.addEventListener('click',function(){show('as');});
+})();
 </script>
 </body>
 </html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EPL 표지 생성기 · Level Covers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#2b2622;--soft:#8a8178;--line:#e6e0d8;--bg:#efeae3;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);font-family:'IBM Plex Sans KR',sans-serif;color:var(--ink);}
+  .bar{position:sticky;top:0;z-index:9;background:#1f1b17;color:#fff;padding:11px 18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .bar .t{font-family:'Fraunces',serif;font-weight:600;font-size:15px;margin-right:6px;}
+  .bar select,.bar button{font-family:inherit;font-size:13px;padding:7px 12px;border-radius:7px;border:none;}
+  .bar select{background:#332e28;color:#fff;border:1px solid #4a423a;min-width:280px;}
+  .bar button{background:#9a5b3f;color:#fff;font-weight:600;cursor:pointer;}
+  .bar .all{background:#3f5a5a;}
+  .bar .st{font-size:11px;color:#c9bfb4;margin-left:auto;}
+  #out{padding:20px 0;}
+  .sheet{background:#fff;width:210mm;max-width:96vw;margin:16px auto;box-shadow:0 3px 22px rgba(0,0,0,.12);
+    height:296mm;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden;}
+  .cv-top{height:33%;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#fff;}
+  .cv-brandmark{font-family:'Fraunces',serif;font-weight:700;font-size:30px;letter-spacing:8px;}
+  .cv-brandsub{font-size:11px;letter-spacing:5px;color:var(--soft);margin-top:8px;}
+  .cv-block{flex:1;background:var(--acc);display:flex;flex-direction:column;align-items:center;text-align:center;padding:46mm 26mm 20mm;}
+  .cv-symwrap{width:130px;height:130px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin-top:-65px;box-shadow:0 8px 26px rgba(0,0,0,.14);}
+  .cv-sym{width:74px;height:74px;color:var(--acc);}
+  .cv-sym svg{width:100%;height:100%;display:block;background:transparent;overflow:visible;border:none;outline:none;fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;}
+  .cv-badge{margin-top:0;font-family:'Fraunces',serif;font-size:14px;letter-spacing:7px;color:var(--sub);}
+  .cv-title{font-family:'Fraunces',serif;font-weight:700;font-size:46px;color:#fff;line-height:1.12;margin-top:16px;padding:0 6px;}
+  .cv-struct{font-size:14px;color:var(--sub);margin-top:16px;}
+  .cv-rule{width:54px;height:3px;background:var(--sub);margin:26px auto;}
+  .cv-loop{font-size:12px;color:var(--sub);letter-spacing:.3px;}
+  .cv-prod{font-family:'Fraunces',serif;font-style:italic;font-size:14px;color:var(--sub);margin-top:auto;padding-top:26px;}
+  .cv-meta{margin-top:16px;font-size:12px;color:#fff;background:rgba(255,255,255,.15);border-radius:6px;padding:9px 0;width:76%;}
+  @media print{
+    @page{size:A4;margin:0;}
+    html,body{background:#fff;margin:0;padding:0;}
+    .bar{display:none;}
+    #out{padding:0;}
+    .sheet{width:210mm;height:296mm;max-width:none;margin:0;box-shadow:none;overflow:hidden;page-break-after:always;}
+    .sheet:last-child{page-break-after:auto;}
+  }
+</style></head>
+<body>
+<div class="bar">
+  <span class="t">EPL 표지 생성기</span>
+  <select id="lv">
+    <option value="1">Level 1 · Sprout — Basic Sentences</option>
+    <option value="2">Level 2 · Sprout — Modifiers & Past</option>
+    <option value="3">Level 3 · Explorer — Negatives & Questions</option>
+    <option value="4">Level 4 · Explorer — Future & Modals</option>
+    <option value="5">Level 5 · Storyteller — Comparison & Quantity</option>
+    <option value="6">Level 6 · Storyteller — To-infinitive, Gerund & Linking</option>
+    <option value="7">Level 7 · Thinker — Sentence Patterns & Perfect</option>
+    <option value="8">Level 8 · Thinker — Passive & Relatives</option>
+    <option value="9">Level 9 · Creator — Integrated Writing</option>
+    <option value="10">Level 10 · Creator — Critical Writing</option>
+  </select>
+  <button onclick="one()">이 표지 만들기</button>
+  <button class="all" onclick="all()">전체 10종</button>
+  <button onclick="window.print()">🖨 인쇄/PDF</button>
+  <span class="st" id="status"></span>
+</div>
+<div id="out"></div>
+<script>
+const COVER={
+  1:{note:"Sprout",acc:"#33502e",sub:"#a9c6a0",title:"Basic Sentences",struct:"Subject + Verb \u00b7 Object \u00b7 Be + State",sym:"<path d=\"M32 54V32\"/><path d=\"M32 34C22 34 16 28 16 20C26 20 32 26 32 34Z\"/><path d=\"M32 30C42 30 48 24 48 16C38 16 32 22 32 30Z\"/><path d=\"M23 54H41\"/>"},
+  2:{note:"Sprout",acc:"#4a5320",sub:"#c4cd93",title:"Modifiers & Past",struct:"Adjectives \u00b7 Adverbs \u00b7 Past Tense",sym:"<path d=\"M18 46C18 26 34 14 48 14C48 34 34 46 18 46Z\"/><path d=\"M23 41L44 20\"/>"},
+  3:{note:"Explorer",acc:"#2b4b66",sub:"#9db9d1",title:"Negatives & Questions",struct:"Negation \u00b7 Questions \u00b7 Wh-words",sym:"<circle cx=\"32\" cy=\"32\" r=\"19\"/><path d=\"M32 20L38 38L32 34L26 38Z\"/>"},
+  4:{note:"Explorer",acc:"#1f4d49",sub:"#8fc2bd",title:"Future & Modals",struct:"Will \u00b7 Can \u00b7 Must",sym:"<path d=\"M32 50C24 40 20 33 20 26A12 12 0 1 1 44 26C44 33 40 40 32 50Z\"/><circle cx=\"32\" cy=\"26\" r=\"5\"/>"},
+  5:{note:"Storyteller",acc:"#8a3d22",sub:"#e0a389",title:"Comparison & Quantity",struct:"Quantity \u00b7 Comparative \u00b7 Superlative",sym:"<path d=\"M32 18C26 14 16 14 12 16V46C16 44 26 44 32 48C38 44 48 44 52 46V16C48 14 38 14 32 18Z\"/><path d=\"M32 18V48\"/>"},
+  6:{note:"Storyteller",acc:"#7a5410",sub:"#e0be83",title:"To-infinitive, Gerund & Linking",struct:"To-infinitive \u00b7 Gerund \u00b7 Conjunctions",sym:"<path d=\"M24 16L40 32L34 46L18 30Z\"/><path d=\"M40 32L48 40\"/>"},
+  7:{note:"Thinker",acc:"#4f2f52",sub:"#c39ec6",title:"Sentence Patterns & Perfect",struct:"Five Patterns \u00b7 That-clause \u00b7 Present Perfect",sym:"<path d=\"M42 24A11 11 0 1 0 40 41A7 7 0 1 0 33 33A4 4 0 1 0 36 30\"/>"},
+  8:{note:"Thinker",acc:"#33285c",sub:"#a99cd1",title:"Passive & Relatives",struct:"Passive \u00b7 Relative Pronoun \u00b7 Relative Adverb",sym:"<path d=\"M32 14V46\"/><path d=\"M18 24H46\"/><path d=\"M18 24L12 36A6 6 0 0 0 24 36Z\"/><path d=\"M46 24L40 36A6 6 0 0 0 52 36Z\"/><path d=\"M24 48H40\"/>"},
+  9:{note:"Creator",acc:"#8a6a1a",sub:"#e6c884",title:"Integrated Writing",struct:"Combining Learned Structures",sym:"<path d=\"M32 12A14 14 0 0 1 40 38H24A14 14 0 0 1 32 12Z\"/><path d=\"M26 44H38\"/><path d=\"M28 50H36\"/>"},
+  10:{note:"Creator",acc:"#1e2b4a",sub:"#a5b4d1",title:"Critical Writing",struct:"Claim \u00b7 Evidence \u00b7 Counter \u00b7 Conclusion",sym:"<path d=\"M32 12L38 26L53 27L41 37L45 52L32 43L19 52L23 37L11 27L26 26Z\"/>"},
+};
+function coverHTML(lv){
+  const c=COVER[lv];
+  return `<div class="sheet" style="--acc:${c.acc};--sub:${c.sub}">
+    <div class="cv-top">
+      <div class="cv-brandmark">EPL</div>
+      <div class="cv-brandsub">EMPOWER · PRACTICE · LITERACY</div>
+    </div>
+    <div class="cv-block">
+      <div class="cv-badge">LEVEL ${lv} · ${c.note.toUpperCase()}</div>
+      <div class="cv-title">${c.title}</div>
+      <div class="cv-struct">${c.struct}</div>
+      <div class="cv-rule"></div>
+      <div class="cv-loop">Reading Words → Sentence Structure → Logical Thinking → Writing</div>
+      <div class="cv-prod">EPL Writing Builder · Thinking-Based English</div>
+      <div class="cv-meta">Name ____________   ·   Date ____________</div>
+    </div>
+  </div>`;
+}
+function one(){
+  const lv=document.getElementById('lv').value;
+  document.getElementById('out').innerHTML=coverHTML(lv);
+  document.getElementById('status').textContent='Level '+lv+' 표지 생성';
+  window.scrollTo({top:0});
+}
+function all(){
+  let h='';for(let lv=1;lv<=10;lv++)h+=coverHTML(lv);
+  document.getElementById('out').innerHTML=h;
+  document.getElementById('status').textContent='전체 10종 표지 생성';
+  window.scrollTo({top:0});
+}
+one();
+</script>
+</body></html>
