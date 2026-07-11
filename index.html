@@ -646,23 +646,24 @@ function curriculum(st,plan){
   </div>`;
 }
 function readlog(st){
-  const rows=Array.from({length:20}).map((_,i)=>`<tr><td class="rn">${i+1}</td><td></td><td></td><td></td><td class="rst"></td></tr>`).join('');
+  const rows=Array.from({length:18}).map((_,i)=>`<tr><td class="rn">${i+1}</td><td></td><td></td><td></td><td class="rst"></td></tr>`).join('');
   return `<div class="sheet">
     <style>
-      .rlog{width:100%;border-collapse:collapse;margin-top:8px;}
-      .rlog th,.rlog td{border:1px solid var(--line);padding:0 9px;height:33px;font-size:12px;color:var(--ink);}
+      .rlog-wrap{flex:1 1 auto;min-height:0;display:flex;margin-top:8px;}
+      .rlog{width:100%;height:100%;border-collapse:collapse;table-layout:fixed;}
+      .rlog th,.rlog td{border:1px solid var(--line);padding:0 9px;font-size:12.5px;color:var(--ink);}
       .rlog th{background:var(--paper);color:var(--soft);font-family:'Fraunces',serif;font-weight:600;font-size:11.5px;text-align:left;height:30px;}
       .rlog td.rn{text-align:center;color:var(--soft);font-weight:600;}
       .rlog td.rst{text-align:center;color:var(--line-2);letter-spacing:2px;}
-      .rlog-note{font-size:11.5px;color:var(--soft);margin:2px 0 0;line-height:1.5;}
+      .rlog-note{font-size:11.5px;color:var(--soft);margin:2px 0 0;}
     </style>
-    <div class="block-h">📚 My Reading Log <span>${st.stage} ${st.nm} · 읽은 책 기록</span></div>
-    <p class="rlog-note">읽은 책의 <b>날짜</b>와 <b>제목</b>을 적어요. 꾸준히 채우면 나만의 독서 기록이 됩니다. <b>재미 ⭐</b>는 1~5개로 표시해요!</p>
-    <table class="rlog">
-      <colgroup><col style="width:36px"><col style="width:92px"><col><col style="width:118px"><col style="width:92px"></colgroup>
-      <thead><tr><th style="text-align:center">No</th><th>날짜 Date</th><th>책 제목 Book Title</th><th>지은이 Author</th><th style="text-align:center">재미 ⭐</th></tr></thead>
+    <div class="block-h">📚 My Reading Log <span>${st.stage} ${st.nm}</span></div>
+    <p class="rlog-note">Write the date and title of each book you read. &nbsp;★ = fun rating (1–5).</p>
+    <div class="rlog-wrap"><table class="rlog">
+      <colgroup><col style="width:38px"><col style="width:100px"><col><col style="width:130px"><col style="width:92px"></colgroup>
+      <thead><tr><th style="text-align:center">No</th><th>Date</th><th>Book Title</th><th>Author</th><th style="text-align:center">Rating</th></tr></thead>
       <tbody>${rows}</tbody>
-    </table>
+    </table></div>
     ${LOGO}
   </div>`;
 }
