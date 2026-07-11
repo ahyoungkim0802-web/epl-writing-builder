@@ -645,27 +645,38 @@ function curriculum(st,plan){
     ${LOGO}
   </div>`;
 }
-function readlog(st){
-  const rows=Array.from({length:18}).map((_,i)=>`<tr><td class="rn">${i+1}</td><td></td><td></td><td></td><td class="rst"></td></tr>`).join('');
-  return `<div class="sheet">
-    <style>
-      .rlog-wrap{flex:1 1 auto;min-height:0;display:flex;margin-top:8px;}
-      .rlog{width:100%;height:100%;border-collapse:collapse;table-layout:fixed;}
-      .rlog th,.rlog td{border:1px solid var(--line);padding:0 9px;font-size:12.5px;color:var(--ink);}
-      .rlog th{background:var(--paper);color:var(--soft);font-family:'Fraunces',serif;font-weight:600;font-size:11.5px;text-align:left;height:30px;}
-      .rlog td.rn{text-align:center;color:var(--soft);font-weight:600;}
-      .rlog td.rst{text-align:center;color:var(--line-2);letter-spacing:2px;}
-      .rlog-note{font-size:11.5px;color:var(--soft);margin:2px 0 0;}
-    </style>
-    <div class="block-h">📚 My Reading Log <span>${st.stage} ${st.nm}</span></div>
-    <p class="rlog-note">Write the date and title of each book you read. &nbsp;★ = fun rating (1–5).</p>
-    <div class="rlog-wrap"><table class="rlog">
-      <colgroup><col style="width:38px"><col style="width:100px"><col><col style="width:130px"><col style="width:92px"></colgroup>
-      <thead><tr><th style="text-align:center">No</th><th>Date</th><th>Book Title</th><th>Author</th><th style="text-align:center">Rating</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table></div>
-    ${LOGO}
-  </div>`;
+function readlog(st,plan){
+  const total=Math.max(1,plan.length);       // 읽을 책 수 = 단원(생각조직) 수
+  const perPageMax=22;                        // A4 한 장 최대 줄 수 (넘으면 자동 분할)
+  const pages=Math.ceil(total/perPageMax);
+  const base=Math.floor(total/pages), rem=total%pages; // 페이지에 고르게 분배
+  const style=`<style>
+    .rlog-wrap{flex:1 1 auto;min-height:0;display:flex;margin-top:8px;}
+    .rlog{width:100%;height:100%;border-collapse:collapse;table-layout:fixed;}
+    .rlog th,.rlog td{border:1px solid var(--line);padding:0 9px;font-size:12.5px;color:var(--ink);}
+    .rlog th{background:var(--paper);color:var(--soft);font-family:'Fraunces',serif;font-weight:600;font-size:11.5px;text-align:left;height:30px;}
+    .rlog td.rn{text-align:center;color:var(--soft);font-weight:600;}
+    .rlog td.rst{text-align:center;color:var(--line-2);letter-spacing:2px;}
+    .rlog-note{font-size:11.5px;color:var(--soft);margin:2px 0 0;}
+  </style>`;
+  let html=style, idx=0;
+  for(let p=0;p<pages;p++){
+    const cnt=base+(p<rem?1:0);
+    let rows='';
+    for(let k=0;k<cnt;k++){ idx++; rows+=`<tr><td class="rn">${idx}</td><td></td><td></td><td></td><td class="rst"></td></tr>`; }
+    const lbl=pages>1?` (${p+1}/${pages})`:'';
+    html+=`<div class="sheet">
+      <div class="block-h">📚 My Reading Log <span>${st.stage} ${st.nm}${lbl}</span></div>
+      <p class="rlog-note">Write the date and title of each book you read. &nbsp;★ = fun rating (1–5).</p>
+      <div class="rlog-wrap"><table class="rlog">
+        <colgroup><col style="width:38px"><col style="width:100px"><col><col style="width:130px"><col style="width:92px"></colgroup>
+        <thead><tr><th style="text-align:center">No</th><th>Date</th><th>Book Title</th><th>Author</th><th style="text-align:center">Rating</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>
+      ${LOGO}
+    </div>`;
+  }
+  return html;
 }
 function unit(st,u){
   const idx=u.n-1, lvl=parseInt(st.id.slice(1),10);
@@ -755,7 +766,7 @@ function generate(){
   const st=findStage(sel.value);
   const want=Math.max(1,Math.min(60,parseInt((document.getElementById('count')||{}).value)||0));
   const plan=spiralPlan(st, want);
-  let html=cover(st)+curriculum(st,plan)+readlog(st);
+  let html=cover(st)+curriculum(st,plan)+readlog(st,plan);
   plan.forEach(u=>html+=unit(st,u));
   document.getElementById('out').innerHTML=html;
   const status=document.getElementById('status'); if(status) status.textContent=`${st.stage} ${st.nm} 워크북 · ${plan.length}단원 (반복→확장)`;
